@@ -48,12 +48,14 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 type Server struct {
 	*goserver.GoServer
 	slave slave
+	jobs  []*pbgbs.Job
 }
 
 // Init builds the server
 func Init() *Server {
 	s := &Server{
 		GoServer: &goserver.GoServer{},
+		jobs:     []*pbgbs.Job{},
 	}
 	s.slave = &prodSlave{dial: s.DialServer}
 	return s
@@ -81,7 +83,9 @@ func (s *Server) Mote(ctx context.Context, master bool) error {
 
 // GetState gets the state of the server
 func (s *Server) GetState() []*pbg.State {
-	return []*pbg.State{}
+	return []*pbg.State{
+		&pbg.State{Key: "jobs", Value: int64(len(s.jobs))},
+	}
 }
 
 func main() {
