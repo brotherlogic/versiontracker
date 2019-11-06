@@ -10,5 +10,5 @@ func (s *Server) track(ctx context.Context) error {
 		s.jobs = jobs
 	}
 
-	return nil
+	return err
 }
