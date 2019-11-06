@@ -5,17 +5,49 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 
 	"github.com/brotherlogic/goserver"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
+	pbgbs "github.com/brotherlogic/gobuildslave/proto"
 	pbg "github.com/brotherlogic/goserver/proto"
 )
+
+type slave interface {
+	list(ctx context.Context, identifier string) ([]*pbgbs.Job, error)
+}
+
+type prodSlave struct {
+	dial func(server string, identifier string) (*grpc.ClientConn, error)
+}
+
+func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, error) {
+	conn, err := p.dial("gobuildslave", identifier)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	client := pbgbs.NewBuildSlaveClient(conn)
+	list, err := client.ListJobs(ctx, &pbgbs.ListRequest{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	jobs := []*pbgbs.Job{}
+	for _, job := range list.GetJobs() {
+		jobs = append(jobs, job.GetJob())
+	}
+	return jobs, err
+}
 
 //Server main server type
 type Server struct {
 	*goserver.GoServer
+	slave slave
 }
 
 // Init builds the server
@@ -23,6 +55,7 @@ func Init() *Server {
 	s := &Server{
 		GoServer: &goserver.GoServer{},
 	}
+	s.slave = &prodSlave{dial: s.DialServer}
 	return s
 }
 
@@ -69,6 +102,8 @@ func main() {
 	if *init {
 		return
 	}
+
+	server.RegisterRepeatingTask(server.track, "track", time.Minute*5)
 
 	fmt.Printf("%v", server.Serve())
 }
