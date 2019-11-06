@@ -12,6 +12,7 @@ import (
 
 func InitTest() *Server {
 	s := Init()
+	s.slave = &testSlave{}
 	s.SkipLog = true
 	s.GoServer.KSclient = *keystoreclient.GetTestClient("./testing")
 	s.Registry = &pbd.RegistryEntry{Identifier: "blah"}
