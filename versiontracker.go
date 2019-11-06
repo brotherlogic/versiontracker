@@ -8,12 +8,34 @@ import (
 	"time"
 
 	"github.com/brotherlogic/goserver"
+	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
+	pbbs "github.com/brotherlogic/buildserver/proto"
 	pbgbs "github.com/brotherlogic/gobuildslave/proto"
 	pbg "github.com/brotherlogic/goserver/proto"
 )
+
+type builder interface {
+	getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error)
+}
+
+type prodBuilder struct {
+}
+
+func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
+	file := fmt.Sprintf("/home/simon/gobuild/bin/%v.version", job.Name)
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	version := &pbbs.Version{}
+	proto.Unmarshal(data, version)
+
+	return version, nil
+}
 
 type slave interface {
 	list(ctx context.Context, identifier string) ([]*pbgbs.Job, error)
@@ -47,8 +69,10 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 //Server main server type
 type Server struct {
 	*goserver.GoServer
-	slave slave
-	jobs  []*pbgbs.Job
+	slave   slave
+	builder builder
+	jobs    []*pbgbs.Job
+	vMap    map[string]*pbbs.Version
 }
 
 // Init builds the server
@@ -58,6 +82,7 @@ func Init() *Server {
 		jobs:     []*pbgbs.Job{},
 	}
 	s.slave = &prodSlave{dial: s.DialServer}
+	s.builder = &prodBuilder{}
 	return s
 }
 
@@ -84,6 +109,7 @@ func (s *Server) Mote(ctx context.Context, master bool) error {
 // GetState gets the state of the server
 func (s *Server) GetState() []*pbg.State {
 	return []*pbg.State{
+		&pbg.State{Key: "versions", Text: fmt.Sprintf("%v", s.vMap)},
 		&pbg.State{Key: "jobs", Value: int64(len(s.jobs))},
 	}
 }
@@ -108,6 +134,7 @@ func main() {
 	}
 
 	server.RegisterRepeatingTaskNonMaster(server.track, "track", time.Minute*5)
+	server.RegisterRepeatingTaskNonMaster(server.buildVersionMap, "build_version_amap", time.Minute*5)
 
 	fmt.Printf("%v", server.Serve())
 }

@@ -29,3 +29,9 @@ func TestBasicPull(t *testing.T) {
 	s := InitTest()
 	s.track(context.Background())
 }
+
+func TestReadLocal(t *testing.T) {
+	s := InitTest()
+	s.jobs = append(s.jobs, &pbgbs.Job{Name: "what"})
+	s.buildVersionMap(context.Background())
+}
