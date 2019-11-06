@@ -103,7 +103,7 @@ func main() {
 		return
 	}
 
-	server.RegisterRepeatingTask(server.track, "track", time.Minute*5)
+	server.RegisterRepeatingTaskNonMaster(server.track, "track", time.Minute*5)
 
 	fmt.Printf("%v", server.Serve())
 }
