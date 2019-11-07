@@ -19,8 +19,8 @@ func (s *Server) buildVersionMap(ctx context.Context) error {
 	for _, job := range s.jobs {
 		lv, _ := s.builder.getLocal(ctx, job)
 		nv, err := s.builder.getRemote(ctx, job)
-		s.Log(fmt.Sprintf("%v and %v -> %v", nv, err, lv))
 		if err == nil && lv.GetVersion() != nv.GetVersion() {
+			s.Log(fmt.Sprintf("%v -> %v,%v", job.GetName(), lv.GetVersion(), nv.GetVersion()))
 			s.needsCopy[job.GetName()] = nv
 		}
 	}
