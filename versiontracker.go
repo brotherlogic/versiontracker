@@ -105,7 +105,7 @@ func Init() *Server {
 		needsCopy: make(map[string]*pbbs.Version),
 	}
 	s.slave = &prodSlave{dial: s.DialServer}
-	s.builder = &prodBuilder{}
+	s.builder = &prodBuilder{dial: s.DialMaster}
 	return s
 }
 
