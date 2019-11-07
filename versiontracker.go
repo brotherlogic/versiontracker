@@ -19,9 +19,31 @@ import (
 
 type builder interface {
 	getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error)
+	getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error)
 }
 
 type prodBuilder struct {
+	dial func(server string) (*grpc.ClientConn, error)
+}
+
+func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
+	conn, err := p.dial("buildserver")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	client := pbbs.NewBuildServiceClient(conn)
+	vers, err := client.GetVersions(ctx, &pbbs.VersionRequest{JustLatest: true, Job: job})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(vers.GetVersions()) == 0 {
+		return nil, fmt.Errorf("No versions returned")
+	}
+
+	return vers.GetVersions()[0], err
 }
 
 func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
@@ -69,17 +91,18 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 //Server main server type
 type Server struct {
 	*goserver.GoServer
-	slave   slave
-	builder builder
-	jobs    []*pbgbs.Job
-	vMap    map[string]*pbbs.Version
+	slave     slave
+	builder   builder
+	jobs      []*pbgbs.Job
+	needsCopy map[string]*pbbs.Version
 }
 
 // Init builds the server
 func Init() *Server {
 	s := &Server{
-		GoServer: &goserver.GoServer{},
-		jobs:     []*pbgbs.Job{},
+		GoServer:  &goserver.GoServer{},
+		jobs:      []*pbgbs.Job{},
+		needsCopy: make(map[string]*pbbs.Version),
 	}
 	s.slave = &prodSlave{dial: s.DialServer}
 	s.builder = &prodBuilder{}
@@ -109,7 +132,7 @@ func (s *Server) Mote(ctx context.Context, master bool) error {
 // GetState gets the state of the server
 func (s *Server) GetState() []*pbg.State {
 	return []*pbg.State{
-		&pbg.State{Key: "versions", Text: fmt.Sprintf("%v", s.vMap)},
+		&pbg.State{Key: "needs_copy", Text: fmt.Sprintf("%v", s.needsCopy)},
 		&pbg.State{Key: "jobs", Value: int64(len(s.jobs))},
 	}
 }

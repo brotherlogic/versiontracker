@@ -2,8 +2,6 @@ package main
 
 import (
 	"golang.org/x/net/context"
-
-	pbbs "github.com/brotherlogic/buildserver/proto"
 )
 
 func (s *Server) track(ctx context.Context) error {
@@ -16,13 +14,13 @@ func (s *Server) track(ctx context.Context) error {
 }
 
 func (s *Server) buildVersionMap(ctx context.Context) error {
-	vMap := make(map[string]*pbbs.Version)
-
 	for _, job := range s.jobs {
 		lv, _ := s.builder.getLocal(ctx, job)
-		vMap[job.GetName()] = lv
+		nv, err := s.builder.getRemote(ctx, job)
+		if err == nil && lv.GetVersion() != nv.GetVersion() {
+			s.needsCopy[job.GetName()] = nv
+		}
 	}
 
-	s.vMap = vMap
 	return nil
 }
