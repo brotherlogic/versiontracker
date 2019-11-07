@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"golang.org/x/net/context"
 )
 
@@ -17,6 +19,7 @@ func (s *Server) buildVersionMap(ctx context.Context) error {
 	for _, job := range s.jobs {
 		lv, _ := s.builder.getLocal(ctx, job)
 		nv, err := s.builder.getRemote(ctx, job)
+		s.Log(fmt.Sprintf("%v and %v", nv, err))
 		if err == nil && lv.GetVersion() != nv.GetVersion() {
 			s.needsCopy[job.GetName()] = nv
 		}
