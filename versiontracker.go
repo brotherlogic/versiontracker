@@ -132,6 +132,10 @@ type Server struct {
 	base      string
 }
 
+func (s *Server) getServerName() string {
+	return s.Registry.Identifier
+}
+
 // Init builds the server
 func Init() *Server {
 	s := &Server{
@@ -141,6 +145,7 @@ func Init() *Server {
 	}
 	s.slave = &prodSlave{dial: s.DialServer}
 	s.builder = &prodBuilder{dial: s.DialMaster}
+	s.copier = &prodCopier{dial: s.DialMaster, server: s.getServerName}
 	s.base = "/home/simon/gobuild/bin/"
 	return s
 }
