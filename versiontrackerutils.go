@@ -40,7 +40,7 @@ func (s *Server) doCopy(ctx context.Context, version *pbbs.Version) error {
 		return err
 	}
 
-	s.Log(fmt.Sprintf("Copied in %v", time.Now().Sub(t)))
+	s.Log(fmt.Sprintf("Copied %v in %v", version.GetJob().GetName(), time.Now().Sub(t)))
 
 	//Save the version file alongside the binary
 	data, _ := proto.Marshal(version)
