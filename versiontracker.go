@@ -13,9 +13,42 @@ import (
 	"google.golang.org/grpc"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
+	pbfc "github.com/brotherlogic/filecopier/proto"
 	pbgbs "github.com/brotherlogic/gobuildslave/proto"
 	pbg "github.com/brotherlogic/goserver/proto"
 )
+
+type copier interface {
+	copy(ctx context.Context, v *pbbs.Version) error
+}
+
+type prodCopier struct {
+	server func() string
+	dial   func(server string) (*grpc.ClientConn, error)
+}
+
+func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version) error {
+	conn, err := p.dial("filecopier")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	copier := pbfc.NewFileCopierServiceClient(conn)
+	req := &pbfc.CopyRequest{
+		InputFile:    v.GetPath(),
+		InputServer:  v.GetServer(),
+		OutputFile:   "/home/simon/gobuild/bin/" + v.GetJob().GetName(),
+		OutputServer: p.server(),
+	}
+
+	cr, err := copier.QueueCopy(ctx, req)
+	for err == nil && cr.GetStatus() != pbfc.CopyStatus_COMPLETE {
+		time.Sleep(time.Second * 5)
+		cr, err = copier.QueueCopy(ctx, req)
+	}
+
+	return err
+}
 
 type builder interface {
 	getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error)
@@ -93,8 +126,10 @@ type Server struct {
 	*goserver.GoServer
 	slave     slave
 	builder   builder
+	copier    copier
 	jobs      []*pbgbs.Job
 	needsCopy map[string]*pbbs.Version
+	base      string
 }
 
 // Init builds the server
@@ -106,6 +141,7 @@ func Init() *Server {
 	}
 	s.slave = &prodSlave{dial: s.DialServer}
 	s.builder = &prodBuilder{dial: s.DialMaster}
+	s.base = "/home/simon/gobuild/bin/"
 	return s
 }
 
@@ -137,6 +173,14 @@ func (s *Server) GetState() []*pbg.State {
 	}
 }
 
+func (s *Server) runCopy(ctx context.Context) error {
+	for _, version := range s.needsCopy {
+		return s.doCopy(ctx, version)
+	}
+
+	return nil
+}
+
 func main() {
 	var quiet = flag.Bool("quiet", false, "Show all output")
 	var init = flag.Bool("init", false, "Prep server")
@@ -158,6 +202,7 @@ func main() {
 
 	server.RegisterRepeatingTaskNonMaster(server.track, "track", time.Minute*5)
 	server.RegisterRepeatingTaskNonMaster(server.buildVersionMap, "build_version_amap", time.Minute*5)
+	server.RegisterRepeatingTaskNonMaster(server.runCopy, "run_copy", time.Minute)
 
 	fmt.Printf("%v", server.Serve())
 }
