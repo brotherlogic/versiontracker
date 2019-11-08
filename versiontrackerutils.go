@@ -2,7 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"time"
 
+	pbbs "github.com/brotherlogic/buildserver/proto"
+	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/context"
 )
 
@@ -26,4 +30,20 @@ func (s *Server) buildVersionMap(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (s *Server) doCopy(ctx context.Context, version *pbbs.Version) error {
+	// Copy the file over - synchronously
+	t := time.Now()
+	err := s.copier.copy(ctx, version)
+	if err != nil {
+		return err
+	}
+
+	s.Log(fmt.Sprintf("Copied in %v", time.Now().Sub(t)))
+
+	//Save the version file alongside the binary
+	data, _ := proto.Marshal(version)
+	err = ioutil.WriteFile(s.base+version.GetJob().GetName()+".version", data, 0644)
+	return err
 }
