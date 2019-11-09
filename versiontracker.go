@@ -37,7 +37,7 @@ func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version) error {
 	req := &pbfc.CopyRequest{
 		InputFile:    v.GetPath(),
 		InputServer:  v.GetServer(),
-		OutputFile:   "/home/simon/gobuild/bin/" + v.GetJob().GetName() + ".what",
+		OutputFile:   "/home/simon/gobuild/bin/" + v.GetJob().GetName(),
 		OutputServer: p.server(),
 	}
 
