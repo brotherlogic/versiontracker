@@ -157,7 +157,7 @@ func Init() *Server {
 		jobs:      []*pbgbs.Job{},
 		needsCopy: make(map[string]*pbbs.Version),
 	}
-	s.slave = &prodSlave{dial: s.DialServer}
+	s.slave = &prodSlave{dial: s.DialServer, server: s.getServerName}
 	s.builder = &prodBuilder{dial: s.DialMaster}
 	s.copier = &prodCopier{dial: s.DialMaster, server: s.getServerName}
 	s.base = "/home/simon/gobuild/bin/"
