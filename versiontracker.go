@@ -193,8 +193,12 @@ func (s *Server) GetState() []*pbg.State {
 }
 
 func (s *Server) runCopy(ctx context.Context) error {
-	for _, version := range s.needsCopy {
-		return s.doCopy(ctx, version)
+	for key, version := range s.needsCopy {
+		err := s.doCopy(ctx, version)
+		if err == nil {
+			delete(s.needsCopy, key)
+		}
+		return err
 	}
 
 	return nil
