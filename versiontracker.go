@@ -94,10 +94,12 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 
 type slave interface {
 	list(ctx context.Context, identifier string) ([]*pbgbs.Job, error)
+	shutdown(ctx context.Context, job *pbgbs.Job) error
 }
 
 type prodSlave struct {
-	dial func(server string, identifier string) (*grpc.ClientConn, error)
+	dial   func(server string, identifier string) (*grpc.ClientConn, error)
+	server func() string
 }
 
 func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, error) {
@@ -119,6 +121,18 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 		jobs = append(jobs, job.GetJob())
 	}
 	return jobs, err
+}
+
+func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
+	conn, err := p.dial(job.GetName(), p.server())
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	client := pbg.NewGoserverServiceClient(conn)
+	_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
+	return err
 }
 
 //Server main server type

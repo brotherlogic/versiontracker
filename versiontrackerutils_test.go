@@ -43,6 +43,10 @@ func (p *testSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 	return []*pbgbs.Job{}, nil
 }
 
+func (p *testSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
+	return nil
+}
+
 type testBuild struct{}
 
 func (t *testBuild) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {

@@ -45,5 +45,10 @@ func (s *Server) doCopy(ctx context.Context, version *pbbs.Version) error {
 	//Save the version file alongside the binary
 	data, _ := proto.Marshal(version)
 	err = ioutil.WriteFile(s.base+version.GetJob().GetName()+".version", data, 0644)
+
+	if err == nil {
+		s.slave.shutdown(ctx, version.GetJob())
+	}
+
 	return err
 }
