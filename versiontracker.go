@@ -28,7 +28,7 @@ type prodCopier struct {
 }
 
 func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version) error {
-	conn, err := p.dial("filecopier", p.server())
+	conn, err := p.dial(p.server(), "filecopier")
 	if err != nil {
 		return err
 	}
