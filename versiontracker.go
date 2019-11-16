@@ -24,11 +24,11 @@ type copier interface {
 
 type prodCopier struct {
 	server func() string
-	dial   func(server string) (*grpc.ClientConn, error)
+	dial   func(server, host string) (*grpc.ClientConn, error)
 }
 
 func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version) error {
-	conn, err := p.dial("filecopier")
+	conn, err := p.dial("filecopier", p.server())
 	if err != nil {
 		return err
 	}
@@ -159,7 +159,7 @@ func Init() *Server {
 	}
 	s.slave = &prodSlave{dial: s.DialServer, server: s.getServerName}
 	s.builder = &prodBuilder{dial: s.DialMaster}
-	s.copier = &prodCopier{dial: s.DialMaster, server: s.getServerName}
+	s.copier = &prodCopier{dial: s.DialServer, server: s.getServerName}
 	s.base = "/home/simon/gobuild/bin/"
 	return s
 }
