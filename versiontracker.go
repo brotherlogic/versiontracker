@@ -219,6 +219,8 @@ func main() {
 	server.Register = server
 	server.RegisterServer("versiontracker", false)
 
+	server.Registry.IgnoresMaster = true
+
 	if *init {
 		return
 	}
