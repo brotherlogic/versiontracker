@@ -218,9 +218,7 @@ func main() {
 	server := Init()
 	server.PrepServer()
 	server.Register = server
-	server.RegisterServerV2("versiontracker", false)
-
-	server.Registry.IgnoresMaster = true
+	server.RegisterServerV2("versiontracker", false, true)
 
 	if *init {
 		return
