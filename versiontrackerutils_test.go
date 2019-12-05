@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
 	"github.com/brotherlogic/keystore/client"
@@ -50,7 +51,7 @@ func (p *testSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
 type testBuild struct{}
 
 func (t *testBuild) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
-	return &pbbs.Version{Version: "one"}, nil
+	return &pbbs.Version{Version: "one", LastBuildTime: time.Now().Unix()}, nil
 }
 
 func (t *testBuild) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
