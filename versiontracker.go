@@ -217,7 +217,10 @@ func main() {
 	server := Init()
 	server.PrepServer()
 	server.Register = server
-	server.RegisterServerV2("versiontracker", false, true)
+	err := server.RegisterServerV2("versiontracker", false, true)
+	if err != nil {
+		return
+	}
 
 	if *init {
 		return
