@@ -51,7 +51,7 @@ func (p *testSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
 type testBuild struct{}
 
 func (t *testBuild) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
-	return &pbbs.Version{Version: "one", LastBuildTime: time.Now().Unix()}, nil
+	return &pbbs.Version{Version: "one", LastBuildTime: time.Now().Unix(), VersionDate: 10}, nil
 }
 
 func (t *testBuild) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
