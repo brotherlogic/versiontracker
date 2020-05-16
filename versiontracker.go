@@ -67,7 +67,7 @@ func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Vers
 	defer conn.Close()
 
 	client := pbbs.NewBuildServiceClient(conn)
-	vers, err := client.GetVersions(ctx, &pbbs.VersionRequest{JustLatest: true, Job: job})
+	vers, err := client.GetVersions(ctx, &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker"})
 	if err != nil {
 		return nil, err
 	}
