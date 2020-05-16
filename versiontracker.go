@@ -56,7 +56,8 @@ type builder interface {
 }
 
 type prodBuilder struct {
-	dial func(server string) (*grpc.ClientConn, error)
+	dial   func(server string) (*grpc.ClientConn, error)
+	server string
 }
 
 func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
@@ -67,7 +68,7 @@ func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Vers
 	defer conn.Close()
 
 	client := pbbs.NewBuildServiceClient(conn)
-	vers, err := client.GetVersions(ctx, &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker"})
+	vers, err := client.GetVersions(ctx, &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker-" + p.server})
 	if err != nil {
 		return nil, err
 	}
@@ -230,5 +231,6 @@ func main() {
 	server.RegisterRepeatingTaskNonMaster(server.buildVersionMap, "build_version_amap", time.Minute*5)
 	server.RegisterRepeatingTaskNonMaster(server.runCopy, "run_copy", time.Minute)
 
+	server.builder = &prodBuilder{dial: server.DialMaster, server: server.Registry.Identifier}
 	fmt.Printf("%v", server.Serve())
 }
