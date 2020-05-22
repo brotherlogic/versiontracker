@@ -23,7 +23,9 @@ func (s *Server) buildVersionMap(ctx context.Context) error {
 	for _, job := range s.jobs {
 		lv, _ := s.builder.getLocal(ctx, job)
 		nv, err := s.builder.getRemote(ctx, job)
-		s.Log(fmt.Sprintf("Equal %v but %v", lv.GetVersion() != nv.GetVersion(), time.Now().Sub(time.Unix(nv.GetLastBuildTime(), 0))))
+		if lv.GetVersion() != nv.GetVersion() {
+			s.Log(fmt.Sprintf("%v is equal %v but %v", job.GetName(), lv.GetVersion() != nv.GetVersion(), time.Now().Sub(time.Unix(nv.GetLastBuildTime(), 0))))
+		}
 		if err == nil && lv.GetVersion() != nv.GetVersion() && time.Now().Sub(time.Unix(nv.GetLastBuildTime(), 0)) < time.Hour*24 && lv.GetVersionDate() < nv.GetVersionDate() {
 			s.Log(fmt.Sprintf("%v -> %v,%v", job.GetName(), lv.GetVersion(), nv.GetVersion()))
 			s.needsCopy[job.GetName()] = nv
@@ -41,7 +43,7 @@ func (s *Server) doCopy(ctx context.Context, version *pbbs.Version) error {
 		return err
 	}
 
-	s.Log(fmt.Sprintf("Copied %v in %v", version.GetJob().GetName(), time.Now().Sub(t)))
+	s.Log(fmt.Sprintf("Copied %v (%v) in %v", version.GetJob().GetName(), version.GetVersion(), time.Now().Sub(t)))
 
 	//Save the version file alongside the binary
 	data, _ := proto.Marshal(version)
