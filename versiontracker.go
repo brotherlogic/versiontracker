@@ -24,11 +24,11 @@ type copier interface {
 
 type prodCopier struct {
 	server func() string
-	dial   func(server, host string) (*grpc.ClientConn, error)
+	dial   func(ctx context.Context, server, host string) (*grpc.ClientConn, error)
 }
 
 func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version) error {
-	conn, err := p.dial("filecopier", p.server())
+	conn, err := p.dial(ctx, "filecopier", p.server())
 	if err != nil {
 		return err
 	}
@@ -56,12 +56,12 @@ type builder interface {
 }
 
 type prodBuilder struct {
-	dial   func(server string) (*grpc.ClientConn, error)
+	dial   func(ctx context.Context, server string) (*grpc.ClientConn, error)
 	server string
 }
 
 func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
-	conn, err := p.dial("buildserver")
+	conn, err := p.dial(ctx, "buildserver")
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +99,12 @@ type slave interface {
 }
 
 type prodSlave struct {
-	dial   func(server string, identifier string) (*grpc.ClientConn, error)
+	dial   func(ctx context.Context, server string, identifier string) (*grpc.ClientConn, error)
 	server func() string
 }
 
 func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, error) {
-	conn, err := p.dial("gobuildslave", identifier)
+	conn, err := p.dial(ctx, "gobuildslave", identifier)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 }
 
 func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
-	conn, err := p.dial(job.GetName(), p.server())
+	conn, err := p.dial(ctx, job.GetName(), p.server())
 	if err != nil {
 		return err
 	}
@@ -158,9 +158,9 @@ func Init() *Server {
 		jobs:      []*pbgbs.Job{},
 		needsCopy: make(map[string]*pbbs.Version),
 	}
-	s.slave = &prodSlave{dial: s.DialServer, server: s.getServerName}
-	s.builder = &prodBuilder{dial: s.DialMaster}
-	s.copier = &prodCopier{dial: s.DialServer, server: s.getServerName}
+	s.slave = &prodSlave{dial: s.FDialSpecificServer, server: s.getServerName}
+	s.builder = &prodBuilder{dial: s.FDialServer}
+	s.copier = &prodCopier{dial: s.FDialSpecificServer, server: s.getServerName}
 	s.base = "/home/simon/gobuild/bin/"
 	return s
 }
@@ -230,6 +230,6 @@ func main() {
 	server.RegisterRepeatingTaskNonMaster(server.buildVersionMap, "build_version_amap", time.Minute*5)
 	server.RegisterRepeatingTaskNonMaster(server.runCopy, "run_copy", time.Minute)
 
-	server.builder = &prodBuilder{dial: server.DialMaster, server: server.Registry.Identifier}
+	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
 	fmt.Printf("%v", server.Serve())
 }
