@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"time"
 
-	pbbs "github.com/brotherlogic/buildserver/proto"
-	"github.com/golang/protobuf/proto"
 	"golang.org/x/net/context"
+
+	pbbs "github.com/brotherlogic/buildserver/proto"
 )
 
 func (s *Server) track(ctx context.Context) error {
@@ -35,24 +34,20 @@ func (s *Server) buildVersionMap(ctx context.Context) error {
 	return nil
 }
 
+func (s *Server) validateVersion(ctx context.Context, name string) error {
+	cv := s.tracking[name]
+	nv, err := s.builder.getRemote(ctx, cv.GetJob())
+	if err == nil {
+		if nv.GetVersionDate() > cv.GetVersionDate() {
+			return s.doCopy(ctx, nv)
+		}
+	}
+	return err
+}
+
 func (s *Server) doCopy(ctx context.Context, version *pbbs.Version) error {
 	// Copy the file over - synchronously
-	t := time.Now()
-	err := s.copier.copy(ctx, version)
-	if err != nil {
-		return err
-	}
-
-	s.Log(fmt.Sprintf("Copied %v (%v) in %v", version.GetJob().GetName(), version.GetVersion(), time.Now().Sub(t)))
-
-	//Save the version file alongside the binary
-	data, _ := proto.Marshal(version)
-	err = ioutil.WriteFile(s.base+version.GetJob().GetName()+".version", data, 0644)
-
-	if err == nil {
-		s.Log(fmt.Sprintf("Requesting shutdown %v", version.GetJob().GetName()))
-		s.slave.shutdown(ctx, version.GetJob())
-	}
-
-	return err
+	key := time.Now().UnixNano()
+	s.keyTrack[key] = version
+	return s.copier.copy(ctx, version, key)
 }

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package versiontracker;
+
+import "github.com/brotherlogic/buildserver/proto/buildserver.proto";
+
+message NewVersionRequest {
+  buildserver.Version version = 1;
+}
+
+message NewVersionResponse {}
+
+message NewJobRequest {
+  buildserver.Version version = 1;
+}
+
+message NewJobResponse {}
+
+service VersionTrackerService {
+  rpc NewVersion(NewVersionRequest) returns (NewVersionResponse) {};
+  rpc NewJob(NewJobRequest) returns (NewJobResponse) {};
+}

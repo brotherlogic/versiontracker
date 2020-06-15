@@ -31,7 +31,7 @@ type testCopy struct {
 	fail bool
 }
 
-func (t *testCopy) copy(ctx context.Context, v *pbbs.Version) error {
+func (t *testCopy) copy(ctx context.Context, v *pbbs.Version, k int64) error {
 	if t.fail {
 		return fmt.Errorf("Built to fail")
 	}
@@ -67,6 +67,24 @@ func TestReadLocal(t *testing.T) {
 	s := InitTest()
 	s.jobs = append(s.jobs, &pbgbs.Job{Name: "what"})
 	s.buildVersionMap(context.Background())
+}
+
+func TestValidate(t *testing.T) {
+	s := InitTest()
+	s.tracking["what"] = &pbbs.Version{Version: "one", LastBuildTime: time.Now().Unix(), VersionDate: 5}
+	err := s.validateVersion(context.Background(), "what")
+	if err != nil {
+		t.Errorf("Bad validate: %v", err)
+	}
+}
+
+func TestValidateWithNoResponse(t *testing.T) {
+	s := InitTest()
+	s.tracking["what"] = &pbbs.Version{Version: "one", LastBuildTime: time.Now().Unix(), VersionDate: 20}
+	err := s.validateVersion(context.Background(), "what")
+	if err != nil {
+		t.Errorf("Bad validate: %v", err)
+	}
 }
 
 func TestCopy(t *testing.T) {
