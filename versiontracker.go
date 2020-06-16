@@ -19,15 +19,16 @@ import (
 )
 
 type copier interface {
-	copy(ctx context.Context, v *pbbs.Version) error
+	copy(ctx context.Context, v *pbbs.Version, key int64) error
 }
 
 type prodCopier struct {
 	server func() string
+	port   func() int32
 	dial   func(ctx context.Context, server, host string) (*grpc.ClientConn, error)
 }
 
-func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version) error {
+func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version, key int64) error {
 	conn, err := p.dial(ctx, "filecopier", p.server())
 	if err != nil {
 		return err
@@ -39,6 +40,8 @@ func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version) error {
 		InputServer:  v.GetServer(),
 		OutputFile:   "/home/simon/gobuild/bin/" + v.GetJob().GetName() + ".new",
 		OutputServer: p.server(),
+		Key:          key,
+		Callback:     fmt.Sprintf("%v:%v", p.server(), p.port()),
 	}
 
 	cr, err := copier.QueueCopy(ctx, req)
@@ -145,10 +148,16 @@ type Server struct {
 	jobs      []*pbgbs.Job
 	needsCopy map[string]*pbbs.Version
 	base      string
+	tracking  map[string]*pbbs.Version
+	keyTrack  map[int64]*pbbs.Version
 }
 
 func (s *Server) getServerName() string {
 	return s.Registry.Identifier
+}
+
+func (s *Server) getServerPort() int32 {
+	return s.Registry.GetPort()
 }
 
 // Init builds the server
@@ -157,10 +166,12 @@ func Init() *Server {
 		GoServer:  &goserver.GoServer{},
 		jobs:      []*pbgbs.Job{},
 		needsCopy: make(map[string]*pbbs.Version),
+		tracking:  make(map[string]*pbbs.Version),
+		keyTrack:  make(map[int64]*pbbs.Version),
 	}
 	s.slave = &prodSlave{dial: s.FDialSpecificServer, server: s.getServerName}
 	s.builder = &prodBuilder{dial: s.FDialServer}
-	s.copier = &prodCopier{dial: s.FDialSpecificServer, server: s.getServerName}
+	s.copier = &prodCopier{dial: s.FDialSpecificServer, server: s.getServerName, port: s.getServerPort}
 	s.base = "/home/simon/gobuild/bin/"
 	return s
 }
@@ -226,10 +237,11 @@ func main() {
 		return
 	}
 
+	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
+
 	server.RegisterRepeatingTaskNonMaster(server.track, "track", time.Minute*5)
 	server.RegisterRepeatingTaskNonMaster(server.buildVersionMap, "build_version_amap", time.Minute*5)
 	server.RegisterRepeatingTaskNonMaster(server.runCopy, "run_copy", time.Minute)
 
-	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
 	fmt.Printf("%v", server.Serve())
 }
