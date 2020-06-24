@@ -16,6 +16,7 @@ import (
 	pbfc "github.com/brotherlogic/filecopier/proto"
 	pbgbs "github.com/brotherlogic/gobuildslave/proto"
 	pbg "github.com/brotherlogic/goserver/proto"
+	pb "github.com/brotherlogic/versiontracker/proto"
 )
 
 type copier interface {
@@ -178,7 +179,7 @@ func Init() *Server {
 
 // DoRegister does RPC registration
 func (s *Server) DoRegister(server *grpc.Server) {
-
+	pb.RegisterVersionTrackerServiceServer(server, s)
 }
 
 // ReportHealth alerts if we're not healthy
