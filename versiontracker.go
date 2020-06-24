@@ -240,9 +240,5 @@ func main() {
 
 	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
 
-	server.RegisterRepeatingTaskNonMaster(server.track, "track", time.Minute*5)
-	server.RegisterRepeatingTaskNonMaster(server.buildVersionMap, "build_version_amap", time.Minute*5)
-	server.RegisterRepeatingTaskNonMaster(server.runCopy, "run_copy", time.Minute)
-
 	fmt.Printf("%v", server.Serve())
 }
