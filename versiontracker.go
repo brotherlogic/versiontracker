@@ -180,6 +180,7 @@ func Init() *Server {
 // DoRegister does RPC registration
 func (s *Server) DoRegister(server *grpc.Server) {
 	pb.RegisterVersionTrackerServiceServer(server, s)
+	pbfc.RegisterFileCopierCallbackServer(server, s)
 }
 
 // ReportHealth alerts if we're not healthy
