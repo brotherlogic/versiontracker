@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"time"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/prometheus/client_golang/prometheus"
@@ -15,10 +16,10 @@ import (
 
 var (
 	//Backlog - the print queue
-	tracking = promauto.NewGauge(prometheus.GaugeOpts{
+	tracking = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "versiontracker_tracking",
 		Help: "The size of the tracking queue",
-	})
+	}, []string{"server", "versiondate"})
 )
 
 //NewVersion a new version is available
@@ -34,7 +35,7 @@ func (s *Server) NewVersion(ctx context.Context, req *pb.NewVersionRequest) (*pb
 //NewJob alerts us to a new job running
 func (s *Server) NewJob(ctx context.Context, req *pb.NewJobRequest) (*pb.NewJobResponse, error) {
 	s.tracking[req.GetVersion().GetJob().GetName()] = req.GetVersion()
-	tracking.Set(float64(len(s.tracking)))
+	tracking.With(prometheus.Labels{"server": req.GetVersion().GetJob().GetName(), "versiondate": fmt.Sprintf("%v", time.Unix(req.GetVersion().GetVersionDate(), 0))}).Set(float64(len(s.tracking)))
 	return &pb.NewJobResponse{}, s.validateVersion(ctx, req.GetVersion().GetJob().GetName())
 }
 
