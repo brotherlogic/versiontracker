@@ -7,6 +7,8 @@ import (
 	"golang.org/x/net/context"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
 func (s *Server) track(ctx context.Context) error {
@@ -34,10 +36,19 @@ func (s *Server) buildVersionMap(ctx context.Context) error {
 	return nil
 }
 
+var (
+	//Backlog - the print queue
+	remote = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "versiontracker_remote",
+		Help: "The size of the tracking queue",
+	}, []string{"server", "versiondate"})
+)
+
 func (s *Server) validateVersion(ctx context.Context, name string) error {
 	cv := s.tracking[name]
 	nv, err := s.builder.getRemote(ctx, cv.GetJob())
 	if err == nil {
+		remote.With(prometheus.Labels{"server": name, "versiondate": fmt.Sprintf("%v", time.Unix(nv.GetVersionDate(), 0))}).Inc()
 		if nv.GetVersionDate() > cv.GetVersionDate() {
 			return s.doCopy(ctx, nv)
 		}
