@@ -91,7 +91,7 @@ func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Vers
 	remoteReq.With(prometheus.Labels{
 		"server": job.GetName(),
 		"reqstr": fmt.Sprintf("%v", req),
-		"resp":   fmt.Sprintf("%v", vers)}).Inc()
+		"resp":   fmt.Sprintf("%v-%v", len(vers.GetVersions()), vers)}).Inc()
 
 	if len(vers.GetVersions()) == 0 {
 		return nil, fmt.Errorf("No versions returned")
