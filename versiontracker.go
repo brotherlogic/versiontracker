@@ -71,7 +71,7 @@ var (
 	remoteReq = promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "versiontracker_remotereq",
 		Help: "The size of the tracking queue",
-	}, []string{"server", "reqstr"})
+	}, []string{"server", "reqstr", "resp"})
 )
 
 func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
@@ -83,11 +83,15 @@ func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Vers
 
 	client := pbbs.NewBuildServiceClient(conn)
 	req := &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker-" + p.server}
-	remoteReq.With(prometheus.Labels{"server": job.GetName(), "reqstr": fmt.Sprintf("%v", req)}).Inc()
 	vers, err := client.GetVersions(ctx, req)
 	if err != nil {
 		return nil, err
 	}
+
+	remoteReq.With(prometheus.Labels{
+		"server": job.GetName(),
+		"reqstr": fmt.Sprintf("%v", req),
+		"resp":   fmt.Sprintf("%v", vers)}).Inc()
 
 	if len(vers.GetVersions()) == 0 {
 		return nil, fmt.Errorf("No versions returned")
