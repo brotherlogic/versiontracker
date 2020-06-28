@@ -9,6 +9,8 @@ import (
 
 	"github.com/brotherlogic/goserver"
 	"github.com/golang/protobuf/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
@@ -64,6 +66,14 @@ type prodBuilder struct {
 	server string
 }
 
+var (
+	//Backlog - the print queue
+	remoteReq = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "versiontracker_remotereq",
+		Help: "The size of the tracking queue",
+	}, []string{"server", "reqstr"})
+)
+
 func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
 	conn, err := p.dial(ctx, "buildserver")
 	if err != nil {
@@ -72,7 +82,9 @@ func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Vers
 	defer conn.Close()
 
 	client := pbbs.NewBuildServiceClient(conn)
-	vers, err := client.GetVersions(ctx, &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker-" + p.server})
+	req := &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker-" + p.server}
+	remoteReq.With(prometheus.Labels{"server": job.GetName(), "reqstr": fmt.Sprintf("%v", req)}).Inc()
+	vers, err := client.GetVersions(ctx, req)
 	if err != nil {
 		return nil, err
 	}
