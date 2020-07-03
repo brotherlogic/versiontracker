@@ -24,7 +24,6 @@ var (
 
 //NewVersion a new version is available
 func (s *Server) NewVersion(ctx context.Context, req *pb.NewVersionRequest) (*pb.NewVersionResponse, error) {
-	s.Log(fmt.Sprintf("FOUND %v -> %v", req, s.tracking))
 	for _, version := range s.tracking {
 		if version.GetJob().GetName() == req.GetVersion().GetJob().GetName() {
 			s.Log(fmt.Sprintf("Found %v vs %v", version, req.GetVersion()))
