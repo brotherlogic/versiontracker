@@ -18,6 +18,7 @@ import (
 	pbfc "github.com/brotherlogic/filecopier/proto"
 	pbgbs "github.com/brotherlogic/gobuildslave/proto"
 	pbg "github.com/brotherlogic/goserver/proto"
+	"github.com/brotherlogic/goserver/utils"
 	pb "github.com/brotherlogic/versiontracker/proto"
 )
 
@@ -256,6 +257,24 @@ func main() {
 	}
 
 	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
+
+	go func() {
+		ctx, cancel := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+		defer cancel()
+		jobs, err := server.slave.list(ctx, server.Registry.GetIdentifier())
+		if err != nil {
+			log.Fatalf("Cannot reach master: %v", err)
+		}
+
+		for _, j := range jobs {
+			lv, err := server.builder.getLocal(ctx, j)
+			if err != nil {
+				server.NewJob(ctx, &pb.NewJobRequest{Version: lv})
+			} else {
+				server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
+			}
+		}
+	}()
 
 	fmt.Printf("%v", server.Serve())
 }
