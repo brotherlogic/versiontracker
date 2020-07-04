@@ -269,9 +269,16 @@ func main() {
 		for _, j := range jobs {
 			lv, err := server.builder.getLocal(ctx, j)
 			if err != nil {
-				server.NewJob(ctx, &pb.NewJobRequest{Version: lv})
+				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: lv})
+				if err2 != nil {
+					server.Log(fmt.Sprintf("Error on new job: %v", err2))
+				}
 			} else {
-				server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
+				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
+				if err2 != nil {
+					server.Log(fmt.Sprintf("Error on new job: %v", err2))
+				}
+
 			}
 		}
 	}()
