@@ -271,7 +271,7 @@ func main() {
 			if err != nil {
 				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: lv})
 				if err2 != nil {
-					server.Log(fmt.Sprintf("Error on new job (%v): %v", lv, err2))
+					server.Log(fmt.Sprintf("Error on new with local job (%v): %v", lv, err2))
 				}
 			} else {
 				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
