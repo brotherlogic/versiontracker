@@ -48,12 +48,7 @@ func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version, key int64) error
 		Callback:     fmt.Sprintf("%v:%v", p.server(), p.port()),
 	}
 
-	cr, err := copier.QueueCopy(ctx, req)
-	for err == nil && cr.GetStatus() != pbfc.CopyStatus_COMPLETE {
-		time.Sleep(time.Second * 5)
-		cr, err = copier.QueueCopy(ctx, req)
-	}
-
+	_, err = copier.QueueCopy(ctx, req)
 	return err
 }
 
