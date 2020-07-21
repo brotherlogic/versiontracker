@@ -54,11 +54,8 @@ func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc
 		err = ioutil.WriteFile(s.base+version.GetJob().GetName()+".version", data, 0644)
 
 		if err == nil {
-			err := s.slave.shutdown(ctx, version.GetJob())
-			s.Log(fmt.Sprintf("Requesting shutdown %v -> %v", version.GetJob().GetName(), err))
-			if err != nil {
-				s.RaiseIssue("Shutdown issue", fmt.Sprintf("Shutdown failed: %v from %v", err, ctx))
-			}
+			// Run the shutdown
+			err = s.slave.shutdown(ctx, version.GetJob())
 		}
 	}
 	return &pbfc.CallbackResponse{}, err
