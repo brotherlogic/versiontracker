@@ -262,13 +262,22 @@ func main() {
 		}
 
 		for _, j := range jobs {
+			ctx, cancel2 := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+			defer cancel2()
+
 			lv, err := server.builder.getLocal(ctx, j)
 			if err == nil {
+				ctx, cancel3 := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+				defer cancel3()
+
 				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: lv})
 				if err2 != nil {
 					server.Log(fmt.Sprintf("Error on new with local job (%v): %v", lv, err2))
 				}
 			} else {
+				ctx, cancel3 := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+				defer cancel3()
+
 				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
 				if err2 != nil {
 					server.Log(fmt.Sprintf("Error on new job (%v): %v", j, err2))
