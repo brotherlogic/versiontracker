@@ -143,7 +143,7 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 var shutdowns = promauto.NewCounterVec(prometheus.CounterOpts{
 	Name: "versiontracker_shutdowns",
 	Help: "Shutdown attempts",
-}, []string{"errror"})
+}, []string{"error"})
 
 func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
 	conn, err := p.dial(ctx, job.GetName(), p.server())
