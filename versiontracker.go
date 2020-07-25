@@ -140,6 +140,11 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 	return jobs, err
 }
 
+var shutdowns = promauto.NewCounterVec(prometheus.CounterOpts{
+	Name: "versiontracker_shutdowns",
+	Help: "Shutdown attempts",
+}, []string{"errror"})
+
 func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
 	conn, err := p.dial(ctx, job.GetName(), p.server())
 	if err != nil {
@@ -149,6 +154,7 @@ func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
 
 	client := pbg.NewGoserverServiceClient(conn)
 	_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
+	shutdowns.With(prometheus.Labels{"error": fmt.Sprintf("%v", err)}).Inc()
 	return err
 }
 
