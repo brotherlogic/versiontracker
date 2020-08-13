@@ -291,6 +291,8 @@ func main() {
 
 			}
 		}
+
+		server.Log("All jobs processed!")
 	}()
 
 	fmt.Printf("%v", server.Serve())
