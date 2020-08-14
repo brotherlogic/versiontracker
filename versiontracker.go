@@ -267,7 +267,10 @@ func main() {
 			log.Fatalf("Cannot reach master: %v", err)
 		}
 
+		server.Log("Working on %v jobs", len(jobs))
+		time.Sleep(time.Second * 2)
 		for _, j := range jobs {
+			server.Log("Working on %v", j)
 			ctx, cancel2 := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
 			defer cancel2()
 
