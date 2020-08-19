@@ -249,6 +249,7 @@ func main() {
 	server.PrepServer()
 	server.Register = server
 	err := server.RegisterServerV2("versiontracker", false, true)
+	server.DiskLog = true
 	if err != nil {
 		return
 	}
