@@ -261,7 +261,7 @@ func main() {
 	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
 
 	go func() {
-		ctx, cancel := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+		ctx, cancel := utils.ManualContext("versiontrack", time.Minute)
 		defer cancel()
 		jobs, err := server.slave.list(ctx, server.Registry.GetIdentifier())
 		if err != nil {
@@ -272,12 +272,12 @@ func main() {
 		time.Sleep(time.Second * 2)
 		for _, j := range jobs {
 			server.Log(fmt.Sprintf("Working on %v", j))
-			ctx, cancel2 := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+			ctx, cancel2 := utils.ManualContext("versiontrack", time.Minute)
 			defer cancel2()
 
 			lv, err := server.builder.getLocal(ctx, j)
 			if err == nil {
-				ctx, cancel3 := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+				ctx, cancel3 := utils.ManualContext("versiontrack", time.Minute)
 				defer cancel3()
 
 				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: lv})
@@ -285,7 +285,7 @@ func main() {
 					server.Log(fmt.Sprintf("Error on new with local job (%v): %v", lv, err2))
 				}
 			} else {
-				ctx, cancel3 := utils.ManualContext("versiontrack", "versiontrack", time.Minute, true)
+				ctx, cancel3 := utils.ManualContext("versiontrack", time.Minute)
 				defer cancel3()
 
 				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
