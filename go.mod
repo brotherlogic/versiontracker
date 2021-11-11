@@ -1,6 +1,6 @@
 module github.com/brotherlogic/versiontracker
 
-go 1.13
+go 1.16
 
 require (
 	github.com/brotherlogic/buildserver v0.0.0-20211110211322-1bafe1de3523

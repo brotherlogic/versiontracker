@@ -184,6 +184,7 @@ github.com/brotherlogic/keystore v0.0.0-20201029130503-da423c07fd79 h1:qPaI4ZmBI
 github.com/brotherlogic/keystore v0.0.0-20201029130503-da423c07fd79/go.mod h1:L2AuADQh5H+ZZAZ/8y5zUf819ApTMmM6/L3/2GNI/qY=
 github.com/brotherlogic/lock v0.0.0-20210715133423-34193158ab11/go.mod h1:kJuzJh7A857mikcPCVMSlqTbSXO0UaOe6qKpB8Mtix0=
 github.com/brotherlogic/lock v0.0.0-20211018000640-77ca8dec85fb/go.mod h1:cQbWuJCYAOsa8ruwZ7fgMRuG+qOsgvPfwb4x5aULshg=
+github.com/brotherlogic/lock v0.0.0-20211110150136-ce20429815d9 h1:IjBGhlqwbqtE1eHYWZu1bMcSFeku0o39jTCrGNEyJx8=
 github.com/brotherlogic/lock v0.0.0-20211110150136-ce20429815d9/go.mod h1:Wk/+//zvPAW5i1djy+7nWfk7JW3dAeuX28DhP2CB1bY=
 github.com/brotherlogic/lock v0.0.0-20211111023039-de7695914faf h1:cQmw8tDMd1gbtOZpzl9ylNbR9DvjBgyDccQzDlWolpI=
 github.com/brotherlogic/lock v0.0.0-20211111023039-de7695914faf/go.mod h1:Wk/+//zvPAW5i1djy+7nWfk7JW3dAeuX28DhP2CB1bY=

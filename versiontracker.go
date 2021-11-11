@@ -268,6 +268,21 @@ func main() {
 			log.Fatalf("Cannot reach master: %v", err)
 		}
 
+		//Add in the slave itself
+		job := &pbgbs.Job{Name: "gobuildslave"}
+		lvgbs, err := server.builder.getLocal(ctx, job)
+		if err == nil {
+			_, err1 := server.NewJob(ctx, &pb.NewJobRequest{Version: lvgbs})
+			if err1 != nil {
+				server.Log(fmt.Sprintf("Error tracking gbs: %v", err))
+			}
+		} else {
+			_, err1 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: job}})
+			if err1 != nil {
+				server.Log(fmt.Sprintf("Error tracking gbs: %v", err))
+			}
+		}
+
 		server.Log(fmt.Sprintf("Working on %v jobs", len(jobs)))
 		time.Sleep(time.Second * 2)
 		for _, j := range jobs {
