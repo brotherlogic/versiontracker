@@ -48,6 +48,7 @@ func (s *Server) NewJob(ctx context.Context, req *pb.NewJobRequest) (*pb.NewJobR
 //Callback processes the callback from file copier
 func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc.CallbackResponse, error) {
 	version, ok := s.keyTrack[req.GetKey()]
+	s.Log(fmt.Sprintf("CALLBACK %v, %v, %v", req, version, ok))
 	var err error
 	if ok {
 		//Save the version file alongside the binary
