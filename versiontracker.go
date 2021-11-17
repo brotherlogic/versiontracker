@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/brotherlogic/goserver"
@@ -105,6 +107,15 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 
 	version := &pbbs.Version{}
 	proto.Unmarshal(data, version)
+
+	res, err := exec.Command("md5sum", fmt.Sprintf("/home/simon/gobuild/bin/%v", job.GetName())).Output()
+	if err != nil {
+		return nil, err
+	}
+	elems := strings.Fields(string(res))
+	if version.GetVersion() != elems[0] {
+		return nil, fmt.Errorf("Mismatch of versions")
+	}
 
 	return version, nil
 }
