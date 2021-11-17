@@ -65,6 +65,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 }
 
 func (s *Server) doCopy(ctx context.Context, version *pbbs.Version) error {
+	s.Log(fmt.Sprintf("COPYING %v", version))
 	// Copy the file over - synchronously
 	key := time.Now().UnixNano()
 	s.keyTrack[key] = version
