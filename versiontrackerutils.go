@@ -47,6 +47,8 @@ var (
 func (s *Server) validateVersion(ctx context.Context, name string) error {
 	cv := s.tracking[name]
 	nv, err := s.builder.getRemote(ctx, cv.GetJob())
+	tv, err2 := s.builder.getLocal(ctx, cv.GetJob())
+	s.Log(fmt.Sprintf("BONKERS %v and %v,%v and %v,%v", cv, nv, err, tv, err2))
 	if err == nil {
 		s.Log(fmt.Sprintf("Got %v but %v", cv, nv))
 		remote.With(prometheus.Labels{"server": name, "versiondate": fmt.Sprintf("%v", time.Unix(nv.GetVersionDate(), 0))}).Inc()
