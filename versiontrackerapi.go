@@ -58,7 +58,7 @@ func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc
 
 		if err == nil {
 			// Run the shutdown
-			err = s.slave.shutdown(ctx, version.GetJob(), version.GetVersion())
+			err = s.slave.shutdown(ctx, version)
 			if err != nil {
 				s.Log(fmt.Sprintf("SHUTDOWN %v -> %v", time.Now(), err))
 			}

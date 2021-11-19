@@ -123,7 +123,7 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 
 type slave interface {
 	list(ctx context.Context, identifier string) ([]*pbgbs.Job, error)
-	shutdown(ctx context.Context, job *pbgbs.Job, vstring string) error
+	shutdown(ctx context.Context, v *pbbs.Version) error
 }
 
 type prodSlave struct {
@@ -157,17 +157,17 @@ var shutdowns = promauto.NewCounterVec(prometheus.CounterOpts{
 	Help: "Shutdown attempts",
 }, []string{"error"})
 
-func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job, vstring string) error {
-	data, err := proto.Marshal(job)
+func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version) error {
+	data, err := proto.Marshal(version)
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(fmt.Sprintf("/media/scratch/versiontracker-shutdown/%v-%v", job.GetName(), vstring), data, 0777)
+	err = os.WriteFile(fmt.Sprintf("/media/scratch/versiontracker-shutdown/%v-%v", version.GetJob().GetName(), version.GetVersion()), data, 0777)
 	if err != nil {
 		return err
 	}
 
-	conn, err := p.dial(ctx, job.GetName(), p.server())
+	conn, err := p.dial(ctx, version.GetJob().GetName(), p.server())
 	if err != nil {
 		return err
 	}
@@ -177,6 +177,39 @@ func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job, vstring string
 	_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
 	shutdowns.With(prometheus.Labels{"error": fmt.Sprintf("%v", err)}).Inc()
 	return err
+}
+
+func (s *Server) doShutdown(f string) error {
+	data, err := ioutil.ReadFile(f)
+	if err != nil {
+		return err
+	}
+	message := &pbbs.Version{}
+	err = proto.Unmarshal(data, message)
+	if err != nil {
+		return err
+	}
+	s.Log(fmt.Sprintf("Shutting down %v -> %v", f, message))
+	return nil
+}
+
+func (s *Server) runShutdown() {
+	for !s.LameDuck {
+		files, err := ioutil.ReadDir("/media/scratch/versiontracker-shutdown")
+		if err != nil {
+			s.Log(fmt.Sprintf("Unable to read dir: %v", err))
+			break
+		}
+
+		if len(files) > 0 {
+			err := s.doShutdown(files[0].Name())
+			if err != nil {
+				s.Log(fmt.Sprintf("Cannot shutdown %v", err))
+			}
+		} else {
+			time.Sleep(time.Second * 30)
+		}
+	}
 }
 
 //Server main server type
