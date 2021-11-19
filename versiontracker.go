@@ -411,7 +411,7 @@ func main() {
 
 	// Prep for shutdown tracking
 	err = os.Mkdir("/media/scratch/versiontracker-shutdown", 0777)
-	if err != nil {
+	if err != nil && !os.IsExist(err) {
 		server.RaiseIssue(fmt.Sprintf("Tracking dir failure for %v", server.Registry.Identifier), fmt.Sprintf("Dir creation failed: %v", err))
 	}
 
