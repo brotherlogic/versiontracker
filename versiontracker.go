@@ -191,17 +191,6 @@ func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version) error {
 	if err != nil {
 		return err
 	}
-
-	conn, err := p.dial(ctx, version.GetJob().GetName(), p.server())
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
-
-	client := pbg.NewGoserverServiceClient(conn)
-	_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
-	shutdowns.With(prometheus.Labels{"error": fmt.Sprintf("%v", err)}).Inc()
-	return err
 }
 
 func (s *Server) doShutdown(f string) error {
