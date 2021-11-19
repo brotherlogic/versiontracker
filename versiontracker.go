@@ -202,10 +202,11 @@ func (s *Server) runShutdown() {
 		}
 
 		if len(files) > 0 {
-			err := s.doShutdown(files[0].Name())
+			err := s.doShutdown("/media/scratch/versiontracker-shutdown/" + files[0].Name())
 			if err != nil {
 				s.Log(fmt.Sprintf("Cannot shutdown %v", err))
 			}
+			time.Sleep(time.Second * 30)
 		} else {
 			time.Sleep(time.Second * 30)
 		}
