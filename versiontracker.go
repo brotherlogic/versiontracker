@@ -126,6 +126,7 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 type slave interface {
 	list(ctx context.Context, identifier string) ([]*pbgbs.Job, error)
 	shutdown(ctx context.Context, v *pbbs.Version) error
+	listversions(ctx context.Context, job string) (string, error)
 }
 
 type prodSlave struct {
@@ -152,6 +153,28 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 		jobs = append(jobs, job.GetJob())
 	}
 	return jobs, err
+}
+
+func (p *prodSlave) listversions(ctx context.Context, job string) (string, error) {
+	conn, err := p.dial(ctx, "gobuildslave", p.server())
+	if err != nil {
+		return "", err
+	}
+	defer conn.Close()
+
+	client := pbgbs.NewBuildSlaveClient(conn)
+	list, err := client.ListJobs(ctx, &pbgbs.ListRequest{})
+
+	if err != nil {
+		return "", err
+	}
+
+	for _, j := range list.GetJobs() {
+		if j.GetJob().GetName() == job {
+			return j.GetRunningVersion(), nil
+		}
+	}
+	return "", status.Errorf(codes.DataLoss, "Cannot find job")
 }
 
 var shutdowns = promauto.NewCounterVec(prometheus.CounterOpts{
@@ -192,7 +215,27 @@ func (s *Server) doShutdown(f string) error {
 		return status.Errorf(codes.DataLoss, "%v", err)
 	}
 	s.Log(fmt.Sprintf("Shutting down %v -> %v", f, message))
-	return nil
+
+	ctx, cancel := utils.ManualContext("vt-shutdown", time.Minute)
+	defer cancel()
+	list, err := s.slave.listversions(ctx, s.Registry.Identifier)
+	if err != nil {
+		return err
+	}
+
+	if message.GetVersion() == list {
+		conn, err := s.FDialSpecificServer(ctx, message.GetJob().GetName(), s.Registry.Identifier)
+		if err != nil {
+			return err
+		}
+		defer conn.Close()
+
+		client := pbg.NewGoserverServiceClient(conn)
+		_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
+		return err
+	}
+
+	return status.Errorf(codes.DataLoss, "Cannot find as a running server %v", err)
 }
 
 func (s *Server) runShutdown() {
@@ -211,6 +254,8 @@ func (s *Server) runShutdown() {
 				} else {
 					s.Log(fmt.Sprintf("Cannot shutdown %v", err))
 				}
+			} else {
+				os.Remove("/media/scratch/versiontracker-shutdown/" + files[0].Name())
 			}
 			time.Sleep(time.Second * 30)
 		} else {

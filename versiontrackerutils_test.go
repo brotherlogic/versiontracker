@@ -44,6 +44,10 @@ func (p *testSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 	return []*pbgbs.Job{}, nil
 }
 
+func (p *testSlave) listversion(ctx context.Context, identifier string) ([]*pbgbs.Job, error) {
+	return []*pbgbs.Job{}, nil
+}
+
 func (p *testSlave) shutdown(ctx context.Context, v *pbbs.Version) error {
 	return nil
 }
