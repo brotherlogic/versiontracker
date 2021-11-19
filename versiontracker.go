@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -324,6 +325,12 @@ func main() {
 
 		server.Log("All jobs processed!")
 	}()
+
+	// Prep for shutdown tracking
+	err = os.Mkdir("/media/scratch/versiontracker-shutdown", 0777)
+	if err != nil {
+		server.RaiseIssue(fmt.Sprintf("Tracking dir failure for %v", server.Registry.Identifier), fmt.Sprintf("Dir creation failed: %v", err))
+	}
 
 	fmt.Printf("%v", server.Serve())
 }
