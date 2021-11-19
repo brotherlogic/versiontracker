@@ -123,7 +123,7 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 
 type slave interface {
 	list(ctx context.Context, identifier string) ([]*pbgbs.Job, error)
-	shutdown(ctx context.Context, job *pbgbs.Job) error
+	shutdown(ctx context.Context, job *pbgbs.Job, vstring string) error
 }
 
 type prodSlave struct {
@@ -157,7 +157,16 @@ var shutdowns = promauto.NewCounterVec(prometheus.CounterOpts{
 	Help: "Shutdown attempts",
 }, []string{"error"})
 
-func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
+func (p *prodSlave) shutdown(ctx context.Context, job *pbgbs.Job, vstring string) error {
+	data, err := proto.Marshal(job)
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(fmt.Sprintf("/media/scratch/versiontracker-shutdown/%v-%v", job.GetName(), vstring), data, 0777)
+	if err != nil {
+		return err
+	}
+
 	conn, err := p.dial(ctx, job.GetName(), p.server())
 	if err != nil {
 		return err

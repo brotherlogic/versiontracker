@@ -7,7 +7,7 @@ import (
 	"time"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
-	"github.com/brotherlogic/keystore/client"
+	keystoreclient "github.com/brotherlogic/keystore/client"
 	"golang.org/x/net/context"
 
 	pbd "github.com/brotherlogic/discovery/proto"
@@ -44,7 +44,7 @@ func (p *testSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 	return []*pbgbs.Job{}, nil
 }
 
-func (p *testSlave) shutdown(ctx context.Context, job *pbgbs.Job) error {
+func (p *testSlave) shutdown(ctx context.Context, job *pbgbs.Job, vstring string) error {
 	return nil
 }
 
