@@ -16,6 +16,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
 	pbfc "github.com/brotherlogic/filecopier/proto"
@@ -182,12 +184,12 @@ func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version) error {
 func (s *Server) doShutdown(f string) error {
 	data, err := ioutil.ReadFile(f)
 	if err != nil {
-		return err
+		return status.Errorf(codes.DataLoss, "%v", err)
 	}
 	message := &pbbs.Version{}
 	err = proto.Unmarshal(data, message)
 	if err != nil {
-		return err
+		return status.Errorf(codes.DataLoss, "%v", err)
 	}
 	s.Log(fmt.Sprintf("Shutting down %v -> %v", f, message))
 	return nil
@@ -204,7 +206,11 @@ func (s *Server) runShutdown() {
 		if len(files) > 0 {
 			err := s.doShutdown("/media/scratch/versiontracker-shutdown/" + files[0].Name())
 			if err != nil {
-				s.Log(fmt.Sprintf("Cannot shutdown %v", err))
+				if status.Convert(err).Code() == codes.DataLoss {
+					os.Remove("/media/scratch/versiontracker-shutdown/" + files[0].Name())
+				} else {
+					s.Log(fmt.Sprintf("Cannot shutdown %v", err))
+				}
 			}
 			time.Sleep(time.Second * 30)
 		} else {
