@@ -374,5 +374,7 @@ func main() {
 		server.RaiseIssue(fmt.Sprintf("Tracking dir failure for %v", server.Registry.Identifier), fmt.Sprintf("Dir creation failed: %v", err))
 	}
 
+	go server.runShutdown()
+
 	fmt.Printf("%v", server.Serve())
 }
