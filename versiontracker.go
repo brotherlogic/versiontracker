@@ -213,6 +213,7 @@ func (s *Server) doShutdown(f string) error {
 		return err
 	}
 
+	s.Log(fmt.Sprintf("Shutting down now %v -> %v", message.GetVersion(), list))
 	if message.GetVersion() == list {
 		conn, err := s.FDialSpecificServer(ctx, message.GetJob().GetName(), s.Registry.Identifier)
 		if err != nil {
