@@ -239,6 +239,7 @@ func (s *Server) runShutdown() {
 
 		if len(files) > 0 {
 			err := s.doShutdown("/media/scratch/versiontracker-shutdown/" + files[0].Name())
+			s.Log(fmt.Sprintf("Done the shutdown: %v", err))
 			if err != nil {
 				if status.Convert(err).Code() == codes.DataLoss {
 					os.Remove("/media/scratch/versiontracker-shutdown/" + files[0].Name())
