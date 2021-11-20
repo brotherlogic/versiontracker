@@ -194,7 +194,7 @@ func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version) error {
 	return nil
 }
 
-func (s *Server) doShutdown(jobname, f string) error {
+func (s *Server) doShutdown(f string) error {
 	data, err := ioutil.ReadFile(f)
 	if err != nil {
 		return status.Errorf(codes.DataLoss, "%v", err)
