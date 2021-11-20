@@ -191,6 +191,7 @@ func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version) error {
 	if err != nil {
 		return err
 	}
+	return nil
 }
 
 func (s *Server) doShutdown(f string) error {
@@ -256,14 +257,15 @@ func (s *Server) runShutdown() {
 //Server main server type
 type Server struct {
 	*goserver.GoServer
-	slave     slave
-	builder   builder
-	copier    copier
-	jobs      []*pbgbs.Job
-	needsCopy map[string]*pbbs.Version
-	base      string
-	tracking  map[string]*pbbs.Version
-	keyTrack  map[int64]*pbbs.Version
+	slave      slave
+	builder    builder
+	copier     copier
+	jobs       []*pbgbs.Job
+	needsCopy  map[string]*pbbs.Version
+	base       string
+	tracking   map[string]*pbbs.Version
+	keyTrack   map[int64]*pbbs.Version
+	oldVersion map[int64]*pbbs.Version
 }
 
 func (s *Server) getServerName() string {
@@ -277,11 +279,12 @@ func (s *Server) getServerPort() int32 {
 // Init builds the server
 func Init() *Server {
 	s := &Server{
-		GoServer:  &goserver.GoServer{},
-		jobs:      []*pbgbs.Job{},
-		needsCopy: make(map[string]*pbbs.Version),
-		tracking:  make(map[string]*pbbs.Version),
-		keyTrack:  make(map[int64]*pbbs.Version),
+		GoServer:   &goserver.GoServer{},
+		jobs:       []*pbgbs.Job{},
+		needsCopy:  make(map[string]*pbbs.Version),
+		tracking:   make(map[string]*pbbs.Version),
+		keyTrack:   make(map[int64]*pbbs.Version),
+		oldVersion: make(map[int64]*pbbs.Version),
 	}
 	s.slave = &prodSlave{dial: s.FDialSpecificServer, server: s.getServerName}
 	s.builder = &prodBuilder{dial: s.FDialServer}
@@ -316,18 +319,6 @@ func (s *Server) GetState() []*pbg.State {
 	return []*pbg.State{
 		&pbg.State{Key: "needs_a_copy", Text: fmt.Sprintf("%v", s.needsCopy)},
 	}
-}
-
-func (s *Server) runCopy(ctx context.Context) error {
-	for key, version := range s.needsCopy {
-		err := s.doCopy(ctx, version)
-		if err == nil {
-			delete(s.needsCopy, key)
-		}
-		return err
-	}
-
-	return nil
 }
 
 func main() {

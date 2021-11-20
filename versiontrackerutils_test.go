@@ -93,7 +93,7 @@ func TestValidateWithNoResponse(t *testing.T) {
 
 func TestCopy(t *testing.T) {
 	s := InitTest()
-	err := s.doCopy(context.Background(), &pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"})
+	err := s.doCopy(context.Background(), &pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"}, &pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"})
 	if err != nil {
 		t.Errorf("Bad copy: %v", err)
 	}
@@ -111,6 +111,7 @@ func TestCopyBad(t *testing.T) {
 			Path:    "path",
 			Server:  "madeup",
 		},
+		&pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"}
 	)
 	if err == nil {
 		t.Errorf("Bad copy did not fail")

@@ -47,27 +47,28 @@ var (
 func (s *Server) validateVersion(ctx context.Context, name string) error {
 	cv := s.tracking[name]
 	nv, err := s.builder.getRemote(ctx, cv.GetJob())
-	_, err2 := s.builder.getLocal(ctx, cv.GetJob())
+	lv, err2 := s.builder.getLocal(ctx, cv.GetJob())
 
 	// Force a copy if local is wrong
 	if err2 != nil {
-		return s.doCopy(ctx, nv)
+		return s.doCopy(ctx, nv, lv)
 	}
 
 	if err == nil {
 		s.Log(fmt.Sprintf("Got %v but %v", cv, nv))
 		remote.With(prometheus.Labels{"server": name, "versiondate": fmt.Sprintf("%v", time.Unix(nv.GetVersionDate(), 0))}).Inc()
 		if nv.GetVersionDate() > cv.GetVersionDate() {
-			return s.doCopy(ctx, nv)
+			return s.doCopy(ctx, nv, lv)
 		}
 	}
 	return err
 }
 
-func (s *Server) doCopy(ctx context.Context, version *pbbs.Version) error {
+func (s *Server) doCopy(ctx context.Context, version, oldversion *pbbs.Version) error {
 	s.Log(fmt.Sprintf("COPYING %v", version))
 	// Copy the file over - synchronously
 	key := time.Now().UnixNano()
 	s.keyTrack[key] = version
+	s.oldVersion[key] = oldversion
 	return s.copier.copy(ctx, version, key)
 }
