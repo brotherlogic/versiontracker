@@ -226,6 +226,9 @@ func (s *Server) doShutdown(f string) error {
 
 		client := pbg.NewGoserverServiceClient(conn)
 		_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
+		if err != nil {
+			s.CtxLog(ctx, fmt.Sprintf("Failed shutdown for %v -> %v", message.GetJob().GetName(), err))
+		}
 		return err
 	}
 
