@@ -215,6 +215,10 @@ func (s *Server) doShutdown(f string) error {
 
 	s.Log(fmt.Sprintf("Shutting down now %v -> %v", message.GetVersion(), list))
 	if message.GetVersion() == list {
+		_, err = s.RunLockingElection(ctx, "versiontracker-shutdown-"+message.GetJob().GetName()+"-"+s.Registry.Identifier)
+		if err != nil {
+			return err
+		}
 		conn, err := s.FDialSpecificServer(ctx, message.GetJob().GetName(), s.Registry.Identifier)
 		if err != nil {
 			return err
