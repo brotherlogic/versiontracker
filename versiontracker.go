@@ -253,7 +253,7 @@ func (s *Server) runShutdown() {
 			} else {
 				os.Remove("/media/scratch/versiontracker-shutdown/" + files[0].Name())
 			}
-			time.Sleep(time.Second * 30)
+			time.Sleep(time.Second * 5)
 		} else {
 			time.Sleep(time.Second * 30)
 		}
