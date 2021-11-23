@@ -54,7 +54,7 @@ func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc
 		//Save the version file alongside the binary
 		data, _ := proto.Marshal(version)
 		err = ioutil.WriteFile(s.base+version.GetJob().GetName()+".nversion", data, 0644)
-		s.Log(fmt.Sprintf("Written the version info (%v) -> %v", err, version))
+		s.Log(fmt.Sprintf("Written the version info to the file (%v) -> %v", err, version))
 
 		if err == nil {
 			err = s.slave.shutdown(ctx, oldversion)
