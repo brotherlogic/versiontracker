@@ -7,6 +7,7 @@ import (
 	"golang.org/x/net/context"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
+	"github.com/brotherlogic/goserver/utils"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -66,10 +67,11 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 }
 
 func (s *Server) doCopy(ctx context.Context, version, oldversion *pbbs.Version) error {
-	s.CtxLog(ctx, fmt.Sprintf("COPYING version %v -> %v", version, oldversion))
+	s.CtxLog(ctx, fmt.Sprintf("COPYING Versions%v -> %v", version, oldversion))
 
 	if oldversion.GetVersion() == "" {
-		s.RaiseIssue("Bad format here", fmt.Sprintf("%v, %v", version, oldversion))
+		key, err := utils.GetContextKey(ctx)
+		s.RaiseIssue("Bad format here", fmt.Sprintf("%v, %v -> %v,%v", version, oldversion, key, err))
 	}
 
 	// Copy the file over - synchronously
