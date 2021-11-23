@@ -371,8 +371,9 @@ func main() {
 			log.Fatalf("Cannot reach master: %v", err)
 		}
 
-		//Add in the slave itself
-		job := &pbgbs.Job{Name: "gobuildslave"}
+		job := &pbgbs.Job{
+			Name: "gobuildslave",
+		}
 		lvgbs, err := server.builder.getLocal(ctx, job)
 		if err == nil {
 			_, err1 := server.NewJob(ctx, &pb.NewJobRequest{Version: lvgbs})
@@ -380,6 +381,7 @@ func main() {
 				server.Log(fmt.Sprintf("Error tracking gbs: %v", err))
 			}
 		} else {
+			server.RaiseIssue("Error getting job info", fmt.Sprintf("Error: %v", err))
 			_, err1 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: job}})
 			if err1 != nil {
 				server.Log(fmt.Sprintf("Error tracking gbs: %v", err))
