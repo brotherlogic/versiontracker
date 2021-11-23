@@ -101,7 +101,7 @@ func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Vers
 	return vers.GetVersions()[0], err
 }
 
-func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
+func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job, erron bool) (*pbbs.Version, error) {
 	file := fmt.Sprintf("/home/simon/gobuild/bin/%v.version", job.Name)
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -117,7 +117,7 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 	}
 	elems := strings.Fields(string(res))
 	if version.GetVersion() != elems[0] {
-		return nil, fmt.Errorf("Mismatch of versions")
+		version.Version = elems[0]
 	}
 
 	return version, nil
