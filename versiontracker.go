@@ -229,6 +229,7 @@ func (s *Server) doShutdown(f string) error {
 		_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
 		if err != nil {
 			s.CtxLog(ctx, fmt.Sprintf("Failed shutdown for %v -> %v", message.GetJob().GetName(), err))
+			s.RaiseIssue("Failed Shutdown for "+message.GetJob().GetName(), "%v", err)
 		}
 		return err
 	}
