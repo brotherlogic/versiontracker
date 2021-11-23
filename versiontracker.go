@@ -214,7 +214,7 @@ func (s *Server) doShutdown(f string) error {
 	if err != nil {
 		return status.Errorf(codes.DataLoss, "%v", err)
 	}
-	s.Log(fmt.Sprintf("Shutting down %v -> %v", f, message))
+	s.Log(fmt.Sprintf("Now Shutting down %v -> %v", f, message))
 
 	ctx, cancel := utils.ManualContext("vt-shutdown", time.Minute)
 	defer cancel()
