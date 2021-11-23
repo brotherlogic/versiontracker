@@ -229,13 +229,21 @@ func (s *Server) doShutdown(f string) error {
 		_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
 		if err != nil {
 			s.CtxLog(ctx, fmt.Sprintf("Failed shutdown for %v -> %v", message.GetJob().GetName(), err))
-			s.RaiseIssue("Failed Shutdown for "+message.GetJob().GetName(), "%v", err)
+			s.RaiseIssue("Failed Shutdown for "+message.GetJob().GetName(), fmt.Sprintf("%v", err))
 		}
 		return err
 	}
 
 	return status.Errorf(codes.DataLoss, "Cannot find as a running server %v", err)
 }
+
+var (
+	//Backlog - the print queue
+	toshutdown = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "versiontracker_shutdown",
+		Help: "The size of the tracking queue",
+	})
+)
 
 func (s *Server) runShutdown() {
 	for !s.LameDuck {
@@ -244,6 +252,8 @@ func (s *Server) runShutdown() {
 			s.Log(fmt.Sprintf("Unable to read dir: %v", err))
 			break
 		}
+
+		toshutdown.Set(float64(len(files)))
 
 		if len(files) > 0 {
 			err := s.doShutdown("/media/scratch/versiontracker-shutdown/" + files[0].Name())
