@@ -66,7 +66,12 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 }
 
 func (s *Server) doCopy(ctx context.Context, version, oldversion *pbbs.Version) error {
-	s.Log(fmt.Sprintf("COPYING %v -> %v", version, oldversion))
+	s.CtxLog(ctx, fmt.Sprintf("COPYING %v -> %v", version, oldversion))
+
+	if oldversion.GetVersion() == "" {
+		s.RaiseIssue("Bad format here", fmt.Sprintf("%v, %v", version, oldversion))
+	}
+
 	// Copy the file over - synchronously
 	key := time.Now().UnixNano()
 	s.keyTrack[key] = version

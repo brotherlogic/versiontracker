@@ -57,10 +57,6 @@ func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc
 		s.Log(fmt.Sprintf("Written the version info (%v) -> %v", err, version))
 
 		if err == nil {
-			// Run the shutdown
-			if oldversion.GetVersion() == "" {
-				s.RaiseIssue("Bad shutdown version", fmt.Sprintf("Shutting down %v on %v -> %v", version.GetJob().GetName(), s.Registry.Identifier, oldversion))
-			}
 			err = s.slave.shutdown(ctx, oldversion)
 			if err != nil {
 				s.Log(fmt.Sprintf("SHUTDOWN %v -> %v", time.Now(), err))
