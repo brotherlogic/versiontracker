@@ -29,7 +29,6 @@ func (s *Server) NewVersion(ctx context.Context, req *pb.NewVersionRequest) (*pb
 		if version.GetJob().GetName() == req.GetVersion().GetJob().GetName() {
 			s.CtxLog(ctx, fmt.Sprintf("Found %v vs %v", version, req.GetVersion()))
 			if version.GetVersionDate() < req.GetVersion().GetVersionDate() {
-				s.tracking[req.GetVersion().GetJob().GetName()] = req.GetVersion()
 				tracking.With(prometheus.Labels{"server": req.GetVersion().GetJob().GetName(), "versiondate": fmt.Sprintf("%v", time.Unix(req.GetVersion().GetVersionDate(), 0))}).Set(float64(len(s.tracking)))
 				return &pb.NewVersionResponse{}, s.doCopy(ctx, req.GetVersion(), version)
 			}

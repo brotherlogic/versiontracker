@@ -56,9 +56,9 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 	}
 
 	if err == nil {
-		s.Log(fmt.Sprintf("Got %v but %v", cv, nv))
+		s.Log(fmt.Sprintf("Got %v but %v", lv, nv))
 		remote.With(prometheus.Labels{"server": name, "versiondate": fmt.Sprintf("%v", time.Unix(nv.GetVersionDate(), 0))}).Inc()
-		if nv.GetVersionDate() > cv.GetVersionDate() {
+		if nv.GetVersionDate() > lv.GetVersionDate() {
 			return s.doCopy(ctx, nv, lv)
 		}
 	}
