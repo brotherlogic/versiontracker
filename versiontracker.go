@@ -197,10 +197,6 @@ func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version) error {
 		return err
 	}
 
-	if version.GetVersion() == "" {
-		s.RaiseIssue("Bad version", fmt.Sprintf("Bad version write: %v", version))
-	}
-
 	err = os.WriteFile(fmt.Sprintf("/media/scratch/versiontracker-shutdown/%v-%v", version.GetJob().GetName(), version.GetVersion()), data, 0777)
 	if err != nil {
 		return err
