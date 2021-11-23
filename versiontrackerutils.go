@@ -66,7 +66,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 }
 
 func (s *Server) doCopy(ctx context.Context, version, oldversion *pbbs.Version) error {
-	s.CtxLog(ctx, fmt.Sprintf("COPYING %v -> %v", version, oldversion))
+	s.CtxLog(ctx, fmt.Sprintf("COPYING Versions %v -> %v", version, oldversion))
 
 	if oldversion.GetVersion() == "" {
 		s.RaiseIssue("Bad format here", fmt.Sprintf("%v, %v", version, oldversion))
