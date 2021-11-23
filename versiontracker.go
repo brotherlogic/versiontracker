@@ -156,6 +156,15 @@ func (p *prodSlave) list(ctx context.Context, identifier string) ([]*pbgbs.Job, 
 }
 
 func (p *prodSlave) listversions(ctx context.Context, job string) (string, error) {
+	if job == "gobuildslave" {
+		res, err := exec.Command("md5sum", fmt.Sprintf("/home/simon/gobuild/bin/gobuildslave")).Output()
+		if err != nil {
+			return "", err
+		}
+		elems := strings.Fields(string(res))
+		return elems[0], nil
+	}
+
 	conn, err := p.dial(ctx, "gobuildslave", p.server())
 	if err != nil {
 		return "", err
