@@ -223,7 +223,7 @@ func (s *Server) doShutdown(f string) error {
 		return err
 	}
 
-	s.Log(fmt.Sprintf("Shutting down now %v -> %v", message.GetVersion(), list))
+	s.Log(fmt.Sprintf("Shutting down (%v) now %v -> %v", message.GetJob().GetName(), message.GetVersion(), list))
 	if message.GetVersion() == list {
 		_, err = s.RunLockingElection(ctx, "versiontracker-shutdown-"+message.GetJob().GetName()+"-"+s.Registry.Identifier)
 		if err != nil {
