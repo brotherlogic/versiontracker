@@ -351,6 +351,65 @@ func (s *Server) GetState() []*pbg.State {
 	}
 }
 
+func (s *Server) procJobs() {
+	for !s.LameDuck {
+		ctx, cancel := utils.ManualContext("versiontrack-init", time.Minute)
+		defer cancel()
+		jobs, err := s.slave.list(ctx, s.Registry.GetIdentifier())
+		if err != nil {
+			log.Fatalf("Cannot reach master: %v", err)
+		}
+
+		job := &pbgbs.Job{
+			Name: "gobuildslave",
+		}
+		lvgbs, err := s.builder.getLocal(ctx, job)
+		if err == nil {
+			_, err1 := s.NewJob(ctx, &pb.NewJobRequest{Version: lvgbs})
+			if err1 != nil {
+				s.Log(fmt.Sprintf("Error tracking gbs: %v", err))
+			}
+		} else {
+			s.RaiseIssue("Error getting job info", fmt.Sprintf("Error: %v", err))
+			_, err1 := s.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: job}})
+			if err1 != nil {
+				s.Log(fmt.Sprintf("Error tracking gbs: %v", err))
+			}
+		}
+
+		s.Log(fmt.Sprintf("Working on %v jobs", len(jobs)))
+		time.Sleep(time.Second * 2)
+		for _, j := range jobs {
+			s.Log(fmt.Sprintf("Working on %v", j))
+			ctx, cancel2 := utils.ManualContext("versiontrack-init2", time.Minute)
+			defer cancel2()
+
+			lv, err := s.builder.getLocal(ctx, j)
+			if err == nil {
+				ctx, cancel3 := utils.ManualContext("versiontrack-init3", time.Minute)
+				defer cancel3()
+
+				_, err2 := s.NewJob(ctx, &pb.NewJobRequest{Version: lv})
+				if err2 != nil {
+					s.Log(fmt.Sprintf("Error on new with local job (%v): %v", lv, err2))
+				}
+			} else {
+				ctx, cancel3 := utils.ManualContext("versiontrack-init4", time.Minute)
+				defer cancel3()
+
+				_, err2 := s.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
+				if err2 != nil {
+					s.Log(fmt.Sprintf("Error on new job (%v): %v", j, err2))
+				}
+
+			}
+		}
+
+		s.Log("All jobs processed!")
+		time.Sleep(time.Hour)
+	}
+}
+
 func main() {
 	server := Init()
 	server.PrepServer()
@@ -363,61 +422,7 @@ func main() {
 
 	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
 
-	go func() {
-		ctx, cancel := utils.ManualContext("versiontrack-init", time.Minute)
-		defer cancel()
-		jobs, err := server.slave.list(ctx, server.Registry.GetIdentifier())
-		if err != nil {
-			log.Fatalf("Cannot reach master: %v", err)
-		}
-
-		job := &pbgbs.Job{
-			Name: "gobuildslave",
-		}
-		lvgbs, err := server.builder.getLocal(ctx, job)
-		if err == nil {
-			_, err1 := server.NewJob(ctx, &pb.NewJobRequest{Version: lvgbs})
-			if err1 != nil {
-				server.Log(fmt.Sprintf("Error tracking gbs: %v", err))
-			}
-		} else {
-			server.RaiseIssue("Error getting job info", fmt.Sprintf("Error: %v", err))
-			_, err1 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: job}})
-			if err1 != nil {
-				server.Log(fmt.Sprintf("Error tracking gbs: %v", err))
-			}
-		}
-
-		server.Log(fmt.Sprintf("Working on %v jobs", len(jobs)))
-		time.Sleep(time.Second * 2)
-		for _, j := range jobs {
-			server.Log(fmt.Sprintf("Working on %v", j))
-			ctx, cancel2 := utils.ManualContext("versiontrack-init2", time.Minute)
-			defer cancel2()
-
-			lv, err := server.builder.getLocal(ctx, j)
-			if err == nil {
-				ctx, cancel3 := utils.ManualContext("versiontrack-init3", time.Minute)
-				defer cancel3()
-
-				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: lv})
-				if err2 != nil {
-					server.Log(fmt.Sprintf("Error on new with local job (%v): %v", lv, err2))
-				}
-			} else {
-				ctx, cancel3 := utils.ManualContext("versiontrack-init4", time.Minute)
-				defer cancel3()
-
-				_, err2 := server.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
-				if err2 != nil {
-					server.Log(fmt.Sprintf("Error on new job (%v): %v", j, err2))
-				}
-
-			}
-		}
-
-		server.Log("All jobs processed!")
-	}()
+	go server.procJobs()
 
 	// Prep for shutdown tracking
 	err = os.Mkdir("/media/scratch/versiontracker-shutdown", 0777)
