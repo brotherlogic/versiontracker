@@ -53,7 +53,10 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 	s.Log(fmt.Sprintf("Working with %v and %v and %v -> %v, %v", cv, nv, lv, err, err2))
 	// Force a copy if local is wrong
 	if err2 != nil {
-		return s.doCopy(ctx, nv, lv)
+		if nv != nil {
+			return s.doCopy(ctx, nv, lv)
+		}
+		return fmt.Errorf("Unable to reach remote: %v", err)
 	}
 
 	if err == nil {
