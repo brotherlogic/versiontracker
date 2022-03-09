@@ -47,19 +47,19 @@ func (s *Server) NewJob(ctx context.Context, req *pb.NewJobRequest) (*pb.NewJobR
 //Callback processes the callback from file copier
 func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc.CallbackResponse, error) {
 	version, ok := s.keyTrack[req.GetKey()]
-	oldversion, ok2 := s.oldVersion[req.GetKey()]
-	s.Log(fmt.Sprintf("CALLBACK %v, %v, %v with %v", req, version, ok, oldversion))
-	var err error
-	if ok && ok2 {
+	oldversion, _ := s.oldVersion[req.GetKey()]
+	s.CtxLog(ctx, fmt.Sprintf("CALLBACK %v, %v, %v with %v", req, version, ok, oldversion))
+	err := fmt.Errorf("Unable to find version")
+	if ok {
 		//Save the version file alongside the binary
 		data, _ := proto.Marshal(version)
 		err = ioutil.WriteFile(s.base+version.GetJob().GetName()+".nversion", data, 0644)
-		s.Log(fmt.Sprintf("Written the version info to the file (%v) -> %v", err, version))
+		s.CtxLog(ctx, fmt.Sprintf("Written the version info to the file (%v) -> %v", err, version))
 
 		if err == nil {
 			err = s.slave.shutdown(ctx, oldversion)
 			if err != nil {
-				s.Log(fmt.Sprintf("SHUTDOWN %v -> %v", time.Now(), err))
+				s.CtxLog(ctx, fmt.Sprintf("SHUTDOWN %v -> %v", time.Now(), err))
 			}
 		}
 	}
