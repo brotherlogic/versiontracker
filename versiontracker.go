@@ -65,6 +65,7 @@ type builder interface {
 type prodBuilder struct {
 	dial   func(ctx context.Context, server string) (*grpc.ClientConn, error)
 	server string
+	bits   int32
 }
 
 var (
@@ -83,7 +84,7 @@ func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Vers
 	defer conn.Close()
 
 	client := pbbs.NewBuildServiceClient(conn)
-	req := &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker-" + p.server}
+	req := &pbbs.VersionRequest{JustLatest: true, Job: job, Origin: "versiontracker-" + p.server, BitSize: p.bits}
 	vers, err := client.GetVersions(ctx, req)
 	if err != nil {
 		return nil, err
@@ -319,9 +320,15 @@ func Init() *Server {
 		oldVersion: make(map[int64]*pbbs.Version),
 	}
 	s.slave = &prodSlave{dial: s.FDialSpecificServer, server: s.getServerName}
-	s.builder = &prodBuilder{dial: s.FDialServer}
 	s.copier = &prodCopier{dial: s.FDialSpecificServer, server: s.getServerName, port: s.getServerPort}
 	s.base = "/home/simon/gobuild/bin/"
+
+	s.PrepServer()
+	if s.Bits == 32 {
+		s.builder = &prodBuilder{dial: s.FDialServer, bits: 32}
+	} else {
+		s.builder = &prodBuilder{dial: s.FDialServer, bits: 64}
+	}
 	return s
 }
 
@@ -414,7 +421,6 @@ func (s *Server) procJobs() {
 
 func main() {
 	server := Init()
-	server.PrepServer()
 	server.Register = server
 	err := server.RegisterServerV2("versiontracker", false, true)
 	server.DiskLog = true
