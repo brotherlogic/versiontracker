@@ -433,7 +433,7 @@ func main() {
 
 	server.Log(fmt.Sprintf("STARTING UP VT"))
 
-	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
+	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier, bits: int32(server.Bits), log: server.CtxLog}
 
 	go server.procJobs()
 
