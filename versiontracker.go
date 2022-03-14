@@ -431,6 +431,8 @@ func main() {
 		return
 	}
 
+	server.Log(fmt.Sprintf("STARTING UP VT"))
+
 	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier}
 
 	go server.procJobs()
