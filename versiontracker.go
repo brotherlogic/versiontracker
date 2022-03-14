@@ -66,6 +66,7 @@ type prodBuilder struct {
 	dial   func(ctx context.Context, server string) (*grpc.ClientConn, error)
 	server string
 	bits   int32
+	log    func(ctx context.Context, message string)
 }
 
 var (
@@ -77,6 +78,7 @@ var (
 )
 
 func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
+	p.log(ctx, fmt.Sprintf("Getting versions: %v with %v", job, p.bits))
 	conn, err := p.dial(ctx, "buildserver")
 	if err != nil {
 		return nil, err
@@ -325,9 +327,9 @@ func Init() *Server {
 
 	s.PrepServer()
 	if s.Bits == 32 {
-		s.builder = &prodBuilder{dial: s.FDialServer, bits: 32}
+		s.builder = &prodBuilder{dial: s.FDialServer, bits: 32, log: s.CtxLog}
 	} else {
-		s.builder = &prodBuilder{dial: s.FDialServer, bits: 64}
+		s.builder = &prodBuilder{dial: s.FDialServer, bits: 64, log: s.CtxLog}
 	}
 	return s
 }
