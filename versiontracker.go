@@ -370,7 +370,8 @@ func (s *Server) procJobs() {
 		}
 
 		job := &pbgbs.Job{
-			Name: "gobuildslave",
+			Name:   "gobuildslave",
+			GoPath: "github.com/brotherlogic/gobuildslave",
 		}
 		lvgbs, err := s.builder.getLocal(ctx, job)
 		if err == nil {
