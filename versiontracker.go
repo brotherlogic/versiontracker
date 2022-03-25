@@ -382,7 +382,6 @@ func (s *Server) procJobs() {
 				s.Log(fmt.Sprintf("Error tracking gbs: %v", err))
 			}
 		} else {
-			s.RaiseIssue("Error getting job info", fmt.Sprintf("Error: %v", err))
 			_, err1 := s.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: job}})
 			if err1 != nil {
 				s.Log(fmt.Sprintf("Error tracking gbs: %v", err))
