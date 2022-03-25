@@ -128,7 +128,7 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 
 type slave interface {
 	list(ctx context.Context, identifier string) ([]*pbgbs.Job, error)
-	shutdown(ctx context.Context, v *pbbs.Version) error
+	shutdown(ctx context.Context, v *pbbs.Version, job string) error
 	listversions(ctx context.Context, job string) (string, error)
 }
 
@@ -194,7 +194,15 @@ var shutdowns = promauto.NewCounterVec(prometheus.CounterOpts{
 	Help: "Shutdown attempts",
 }, []string{"error"})
 
-func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version) error {
+func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version, job string) error {
+	if version == nil {
+		err := os.WriteFile(fmt.Sprintf("/media/scratch/versiontracker-shutdown/%v-%v", job, "ANY"), []byte(""), 0777)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
 	data, err := proto.Marshal(version)
 	if err != nil {
 		return err

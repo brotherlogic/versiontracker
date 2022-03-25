@@ -59,7 +59,7 @@ func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc
 		s.CtxLog(ctx, fmt.Sprintf("Written the version info to the file (%v) -> %v", err, version))
 
 		if err == nil {
-			err = s.slave.shutdown(ctx, oldversion)
+			err = s.slave.shutdown(ctx, oldversion, version.GetJob().GetName())
 			if err != nil {
 				s.CtxLog(ctx, fmt.Sprintf("SHUTDOWN %v -> %v", time.Now(), err))
 			}
