@@ -227,7 +227,7 @@ func (s *Server) doShutdown(f string) error {
 	}
 	s.Log(fmt.Sprintf("Now Shutting down %v -> %v", f, message))
 
-	ctx, cancel := utils.ManualContext("vt-shutdown", time.Minute)
+	ctx, cancel := utils.ManualContext(fmt.Sprintf("vt-shutdown-%v", message.GetJob().GetName()), time.Minute)
 	defer cancel()
 	list, err := s.slave.listversions(ctx, message.GetJob().GetName())
 	if err != nil {
