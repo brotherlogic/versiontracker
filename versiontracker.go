@@ -63,10 +63,11 @@ type builder interface {
 }
 
 type prodBuilder struct {
-	dial   func(ctx context.Context, server string) (*grpc.ClientConn, error)
-	server string
-	bits   int32
-	log    func(ctx context.Context, message string)
+	dial       func(ctx context.Context, server string) (*grpc.ClientConn, error)
+	server     string
+	bits       int32
+	log        func(ctx context.Context, message string)
+	raiseIssue func(title, body string)
 }
 
 var (
@@ -121,6 +122,10 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 	elems := strings.Fields(string(res))
 	if version.GetVersion() != elems[0] {
 		version.Version = elems[0]
+	}
+
+	if time.Since(time.Unix(version.GetVersionDate(), 0)) > time.Hour*24*30 {
+		p.raiseIssue("%v needs update", fmt.Sprintf("It was built on %v", time.Unix(version.GetVersionDate(), 0)))
 	}
 
 	return version, nil
@@ -440,7 +445,13 @@ func main() {
 
 	server.Log(fmt.Sprintf("STARTING UP VT"))
 
-	server.builder = &prodBuilder{dial: server.FDialServer, server: server.Registry.Identifier, bits: int32(server.Bits), log: server.CtxLog}
+	server.builder = &prodBuilder{
+		dial:       server.FDialServer,
+		server:     server.Registry.Identifier,
+		bits:       int32(server.Bits),
+		log:        server.CtxLog,
+		raiseIssue: server.RaiseIssue,
+	}
 
 	go server.procJobs()
 
