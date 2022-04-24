@@ -125,7 +125,7 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 	}
 
 	if time.Since(time.Unix(version.GetVersionDate(), 0)) > time.Hour*24*30 {
-		p.raiseIssue("%v needs update", fmt.Sprintf("It was built on %v", time.Unix(version.GetVersionDate(), 0)))
+		p.raiseIssue(fmt.Sprintf("%v needs update", job.GetName()), fmt.Sprintf("It was built on %v", time.Unix(version.GetVersionDate(), 0)))
 	}
 
 	return version, nil
