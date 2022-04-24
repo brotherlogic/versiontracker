@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package versiontracker;
 
+option go_package = "github.com/brotherlogic/versiontracker/proto";
+
 import "github.com/brotherlogic/buildserver/proto/buildserver.proto";
 
 message Config {
@@ -21,7 +23,7 @@ message NewJobRequest {
 }
 
 message NewJobResponse {
-  
+
 }
 
 service VersionTrackerService {

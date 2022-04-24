@@ -19,11 +19,17 @@ import (
 	"google.golang.org/grpc/status"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
+	dspb "github.com/brotherlogic/dstore/proto"
 	pbfc "github.com/brotherlogic/filecopier/proto"
 	pbgbs "github.com/brotherlogic/gobuildslave/proto"
 	pbg "github.com/brotherlogic/goserver/proto"
 	"github.com/brotherlogic/goserver/utils"
 	pb "github.com/brotherlogic/versiontracker/proto"
+	google_protobuf "github.com/golang/protobuf/ptypes/any"
+)
+
+const (
+	CONFIG_KEY = "github.com/brotherlogic/versiontracker/config"
 )
 
 type copier interface {
@@ -34,6 +40,65 @@ type prodCopier struct {
 	server func() string
 	port   func() int32
 	dial   func(ctx context.Context, server, host string) (*grpc.ClientConn, error)
+}
+
+func (s *Server) loadConfig(ctx context.Context) (*pb.Config, error) {
+	conn, err := s.FDialServer(ctx, "dstore")
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	client := dspb.NewDStoreServiceClient(conn)
+	res, err := client.Read(ctx, &dspb.ReadRequest{Key: CONFIG_KEY})
+	if err != nil {
+		if status.Convert(err).Code() == codes.InvalidArgument {
+			return &pb.Config{BuildBugs: make(map[string]int32)}, nil
+		}
+
+		return nil, err
+
+	}
+
+	if res.GetConsensus() < 0.5 {
+		return nil, fmt.Errorf("could not get read consensus (%v)", res.GetConsensus())
+	}
+
+	config := &pb.Config{}
+	err = proto.Unmarshal(res.GetValue().GetValue(), config)
+	if err != nil {
+		return nil, err
+	}
+	if config.BuildBugs == nil {
+		config.BuildBugs = make(map[string]int32)
+	}
+
+	return config, nil
+}
+
+func (s *Server) saveConfig(ctx context.Context, config *pb.Config) error {
+	conn, err := s.FDialServer(ctx, "dstore")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	data, err := proto.Marshal(config)
+	if err != nil {
+		return err
+	}
+
+	client := dspb.NewDStoreServiceClient(conn)
+	res, err := client.Write(ctx, &dspb.WriteRequest{Key: CONFIG_KEY, Value: &google_protobuf.Any{Value: data}})
+	if err != nil {
+		return err
+	}
+
+	if res.GetConsensus() < 0.5 {
+		return fmt.Errorf("could not get write consensus (%v)", res.GetConsensus())
+	}
+
+	return nil
 }
 
 func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version, key int64) error {

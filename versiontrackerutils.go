@@ -49,6 +49,37 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 	nv, err := s.builder.getRemote(ctx, cv.GetJob())
 	lv, err2 := s.builder.getLocal(ctx, cv.GetJob())
 
+	config, err := s.loadConfig(ctx)
+	if err != nil {
+		return err
+	}
+
+	if lv != nil && time.Since(time.Unix(lv.GetVersionDate(), 0)) > time.Hour*24*60 && config.BuildBugs[cv.GetJob().GetName()] == 0 {
+
+		issue, err := s.ImmediateIssue(ctx, "Build needed", fmt.Sprintf("Last built %v", time.Unix(lv.GetVersionDate(), 0)))
+		if err != nil {
+			return err
+		}
+		config.BuildBugs[cv.GetJob().GetName()] = issue.GetNumber()
+		err = s.saveConfig(ctx, config)
+		if err != nil {
+			return err
+		}
+	} else {
+		val := config.BuildBugs[cv.GetJob().GetName()]
+		if val != 0 {
+			err = s.DeleteIssue(ctx, val)
+			if err != nil {
+				return err
+			}
+			delete(config.BuildBugs, cv.GetJob().GetName())
+			err = s.saveConfig(ctx, config)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	s.Log(fmt.Sprintf("Working with %v and %v and %v -> %v, %v", cv, nv, lv, err, err2))
 	// Force a copy if local is wrong
 	if err2 != nil {
