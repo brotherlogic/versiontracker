@@ -4,17 +4,25 @@ package versiontracker;
 
 import "github.com/brotherlogic/buildserver/proto/buildserver.proto";
 
+message Config {
+  map<string,int32> build_bugs = 1;
+}
+
 message NewVersionRequest {
   buildserver.Version version = 1;
 }
 
-message NewVersionResponse {}
+message NewVersionResponse {
+
+}
 
 message NewJobRequest {
   buildserver.Version version = 1;
 }
 
-message NewJobResponse {}
+message NewJobResponse {
+  
+}
 
 service VersionTrackerService {
   rpc NewVersion(NewVersionRequest) returns (NewVersionResponse) {};
