@@ -56,7 +56,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 
 	if lv != nil && time.Since(time.Unix(lv.GetVersionDate(), 0)) > time.Hour*24*60 && config.BuildBugs[cv.GetJob().GetName()] == 0 {
 
-		issue, err := s.ImmediateIssue(ctx, "Build needed", fmt.Sprintf("Last built %v", time.Unix(lv.GetVersionDate(), 0)))
+		issue, err := s.ImmediateIssue(ctx, "Build needed", fmt.Sprintf("%v was last built %v", cv.GetJob().GetName(), time.Unix(lv.GetVersionDate(), 0)))
 		if err != nil {
 			return err
 		}
