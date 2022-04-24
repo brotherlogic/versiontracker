@@ -54,6 +54,10 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 		return err
 	}
 
+	if lv != nil {
+		s.CtxLog(ctx, fmt.Sprintf("Reading %v -> %v with %v and %v", name, config, lv, time.Since((time.Unix(lv.GetVersionDate(), 0)))))
+	}
+
 	if lv != nil && time.Since(time.Unix(lv.GetVersionDate(), 0)) > time.Hour*24*60 && config.BuildBugs[cv.GetJob().GetName()] == 0 {
 
 		issue, err := s.ImmediateIssue(ctx, "Build needed", fmt.Sprintf("%v was last built %v", cv.GetJob().GetName(), time.Unix(lv.GetVersionDate(), 0)))
@@ -65,7 +69,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 		if err != nil {
 			return err
 		}
-	} else {
+	} else if config.BuildBugs[cv.GetJob().GetName()] != 0 {
 		val := config.BuildBugs[cv.GetJob().GetName()]
 		if val != 0 {
 			err = s.DeleteIssue(ctx, val)
