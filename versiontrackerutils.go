@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"golang.org/x/net/context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
@@ -61,7 +63,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 	if lv != nil && time.Since(time.Unix(lv.GetVersionDate(), 0)) > time.Hour*24*60 && config.BuildBugs[cv.GetJob().GetName()] == 0 {
 
 		issue, err := s.ImmediateIssue(ctx, "Build needed", fmt.Sprintf("According to %v %v was last built %v", s.Registry.Identifier, cv.GetJob().GetName(), time.Unix(lv.GetVersionDate(), 0)))
-		if err != nil {
+		if err != nil && status.Convert(err).Code() != codes.ResourceExhausted {
 			return err
 		}
 		config.BuildBugs[cv.GetJob().GetName()] = issue.GetNumber()
