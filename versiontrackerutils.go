@@ -71,9 +71,9 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 		if err != nil {
 			return err
 		}
-	} else if config.BuildBugs[cv.GetJob().GetName()] != 0 {
+	} else if lv != nil && config.BuildBugs[cv.GetJob().GetName()] != 0 {
 		val := config.BuildBugs[cv.GetJob().GetName()]
-		if val != 0 && time.Since(time.Unix(lv.GetVersionDate(), 0)) <= time.Hour*24*60 {
+		if time.Since(time.Unix(lv.GetVersionDate(), 0)) <= time.Hour*24*60 {
 			err = s.DeleteIssue(ctx, val)
 			if err != nil {
 				return err
