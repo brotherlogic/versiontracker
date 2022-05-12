@@ -115,7 +115,6 @@ func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version, key int64) error
 		OutputServer: p.server(),
 		Key:          key,
 		Callback:     fmt.Sprintf("%v:%v", p.server(), p.port()),
-		Override:     true,
 	}
 
 	_, err = copier.QueueCopy(ctx, req)
