@@ -8,7 +8,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	pbb "github.com/brotherlogic/builder/proto"
 	pbbs "github.com/brotherlogic/buildserver/proto"
+	"github.com/brotherlogic/goserver/utils"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -71,6 +73,19 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 		if err != nil {
 			return err
 		}
+	} else if nv != nil && time.Since(time.Unix(nv.GetVersionDate(), 0)) > time.Hour*24*30 {
+		go func() {
+			ctx, cancel := utils.ManualContext(fmt.Sprintf("versiontracker-%v-rebuild", name), time.Minute*10)
+			defer cancel()
+
+			conn, err := utils.LFDialServer(ctx, "builder")
+			if err != nil {
+				return
+			}
+
+			client := pbb.NewBuildClient(conn)
+			client.Refresh(ctx, &pbb.RefreshRequest{Job: name})
+		}()
 	} else if nv != nil && config.BuildBugs[cv.GetJob().GetName()] != 0 {
 		val := config.BuildBugs[cv.GetJob().GetName()]
 		if time.Since(time.Unix(nv.GetVersionDate(), 0)) <= time.Hour*24*60 {
