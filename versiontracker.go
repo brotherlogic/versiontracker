@@ -301,7 +301,7 @@ func (s *Server) doShutdown(f string) error {
 	}
 
 	s.CtxLog(ctx, fmt.Sprintf("Shutting down (%v) now %v -> %v", message.GetJob().GetName(), message.GetVersion(), list))
-	if message.GetVersion() == list {
+	if message.GetVersion() == list || strings.Contains(f, "ANY") {
 		_, err = s.RunLockingElection(ctx, "versiontracker-shutdown-"+message.GetJob().GetName(), fmt.Sprintf("Locking shutdown for %v on %v", message.GetJob().GetName(), s.Registry.GetIdentifier()))
 		if err != nil {
 			return err
