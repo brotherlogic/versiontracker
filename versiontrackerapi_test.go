@@ -29,15 +29,6 @@ func TestNewVersionWithUpdate(t *testing.T) {
 	}
 }
 
-func TestNewJob(t *testing.T) {
-	s := InitTest()
-
-	_, err := s.NewJob(context.Background(), &pb.NewJobRequest{})
-	if err != nil {
-		t.Errorf("Bad new job")
-	}
-}
-
 func TestCallback(t *testing.T) {
 	s := InitTest()
 	s.keyTrack[int64(123)] = &pbbs.Version{}

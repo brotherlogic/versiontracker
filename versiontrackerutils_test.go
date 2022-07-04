@@ -48,7 +48,7 @@ func (p *testSlave) listversions(ctx context.Context, identifier string) (string
 	return "", nil
 }
 
-func (p *testSlave) shutdown(ctx context.Context, v *pbbs.Version) error {
+func (p *testSlave) shutdown(ctx context.Context, v *pbbs.Version, n string) error {
 	return nil
 }
 
@@ -73,24 +73,6 @@ func TestReadLocal(t *testing.T) {
 	s.buildVersionMap(context.Background())
 }
 
-func TestValidate(t *testing.T) {
-	s := InitTest()
-	s.tracking["what"] = &pbbs.Version{Version: "one", LastBuildTime: time.Now().Unix(), VersionDate: 5}
-	err := s.validateVersion(context.Background(), "what")
-	if err != nil {
-		t.Errorf("Bad validate: %v", err)
-	}
-}
-
-func TestValidateWithNoResponse(t *testing.T) {
-	s := InitTest()
-	s.tracking["what"] = &pbbs.Version{Version: "one", LastBuildTime: time.Now().Unix(), VersionDate: 20}
-	err := s.validateVersion(context.Background(), "what")
-	if err != nil {
-		t.Errorf("Bad validate: %v", err)
-	}
-}
-
 func TestCopy(t *testing.T) {
 	s := InitTest()
 	err := s.doCopy(context.Background(), &pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"}, &pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"})
@@ -111,7 +93,7 @@ func TestCopyBad(t *testing.T) {
 			Path:    "path",
 			Server:  "madeup",
 		},
-		&pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"}
+		&pbbs.Version{Job: &pbgbs.Job{Name: "Hello"}, Version: "yes", Path: "path", Server: "madeup"},
 	)
 	if err == nil {
 		t.Errorf("Bad copy did not fail")
