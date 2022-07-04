@@ -262,7 +262,12 @@ var shutdowns = promauto.NewCounterVec(prometheus.CounterOpts{
 
 func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version, job string) error {
 	if version == nil {
-		err := os.WriteFile(fmt.Sprintf("/media/scratch/versiontracker-shutdown/%v-%v", job, "ANY"), []byte(""), 0777)
+		version = &pbbs.Version{Job: &pbgbs.Job{Name: job}}
+		bbytes, err := proto.Marshal(version)
+		if err != nil {
+			return err
+		}
+		err = os.WriteFile(fmt.Sprintf("/media/scratch/versiontracker-shutdown/%v-%v", job, "ANY"), bbytes, 0777)
 		if err != nil {
 			return err
 		}
