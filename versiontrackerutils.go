@@ -79,10 +79,10 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 			defer cancel()
 
 			conn, err := utils.LFDialServer(ctx, "builder")
-			defer conn.Close()
 			if err != nil {
 				return
 			}
+			defer conn.Close()
 
 			client := pbb.NewBuildClient(conn)
 			client.Refresh(ctx, &pbb.RefreshRequest{Job: name})
