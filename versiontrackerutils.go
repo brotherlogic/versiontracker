@@ -79,6 +79,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 			defer cancel()
 
 			conn, err := utils.LFDialServer(ctx, "builder")
+			defer conn.Close()
 			if err != nil {
 				return
 			}
