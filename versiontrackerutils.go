@@ -82,6 +82,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 			if err != nil {
 				return
 			}
+			defer conn.Close()
 
 			client := pbb.NewBuildClient(conn)
 			client.Refresh(ctx, &pbb.RefreshRequest{Job: name})
