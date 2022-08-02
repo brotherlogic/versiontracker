@@ -404,7 +404,7 @@ func Init() *Server {
 	s.copier = &prodCopier{dial: s.FDialSpecificServer, server: s.getServerName, port: s.getServerPort}
 	s.base = "/home/simon/gobuild/bin/"
 
-	s.PrepServer()
+	s.PrepServer("versiontracker")
 	if s.Bits == 32 {
 		s.builder = &prodBuilder{dial: s.FDialServer, bits: 32, log: s.CtxLog}
 	} else {
@@ -508,7 +508,7 @@ func (s *Server) procJobs() {
 func main() {
 	server := Init()
 	server.Register = server
-	err := server.RegisterServerV2("versiontracker", false, true)
+	err := server.RegisterServerV2(false)
 	server.DiskLog = true
 	if err != nil {
 		return

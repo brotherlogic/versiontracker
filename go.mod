@@ -3,17 +3,20 @@ module github.com/brotherlogic/versiontracker
 go 1.16
 
 require (
-	github.com/brotherlogic/builder v0.0.0-20220513235422-756736c3ac33
-	github.com/brotherlogic/buildserver v0.0.0-20220513164216-3e12da35e873
-	github.com/brotherlogic/discovery v0.0.0-20220519232029-8e51a90afab1
-	github.com/brotherlogic/dstore v0.0.0-20220520031146-f5d6248ae5bd
-	github.com/brotherlogic/filecopier v0.0.0-20220604171820-e28d590afe92
-	github.com/brotherlogic/gobuildslave v0.0.0-20220513171336-d94eb690251e
-	github.com/brotherlogic/goserver v0.0.0-20220604174220-0e8be9f0368e
-	github.com/brotherlogic/keystore v0.0.0-20220513234718-46a4655a49c0
+	github.com/brotherlogic/builder v0.0.0-20220730010707-0bf356af5467
+	github.com/brotherlogic/buildserver v0.0.0-20220707145838-f32062433e3b
+	github.com/brotherlogic/discovery v0.0.0-20220730004509-d845c0dc4b6d
+	github.com/brotherlogic/dstore v0.0.0-20220730012635-a7084a0861db
+	github.com/brotherlogic/filecopier v0.0.0-20220606200431-353e1614d63b
+	github.com/brotherlogic/githubcard v0.0.0-20220801172901-d229178df90b // indirect
+	github.com/brotherlogic/gobuildslave v0.0.0-20220730205600-315df8f4b93c
+	github.com/brotherlogic/goserver v0.0.0-20220802151516-4b60a60b3020
+	github.com/brotherlogic/keystore v0.0.0-20220621052415-70ae78501e3c
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.12.2
-	golang.org/x/net v0.0.0-20220531201128-c960675eff93
-	google.golang.org/grpc v1.47.0
-	google.golang.org/protobuf v1.28.0
+	golang.org/x/net v0.0.0-20220728211354-c7608f3a8462
+	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
+	google.golang.org/genproto v0.0.0-20220802133213-ce4fa296bf78 // indirect
+	google.golang.org/grpc v1.48.0
+	google.golang.org/protobuf v1.28.1
 )
