@@ -321,7 +321,7 @@ func (s *Server) doShutdown(f string) error {
 		_, err = client.Shutdown(ctx, &pbg.ShutdownRequest{})
 		if err != nil && status.Convert(err).Code() != codes.Unavailable {
 			s.CtxLog(ctx, fmt.Sprintf("Failed shutdown for %v -> %v", message.GetJob().GetName(), err))
-			s.RaiseIssue("Failed Shutdown for "+message.GetJob().GetName(), fmt.Sprintf("%v", err))
+			s.RaiseIssue("Failed Shutdown for "+message.GetJob().GetName(), fmt.Sprintf("%v -> %v on %v", err, message.GetJob().GetName(), s.Registry.Identifier))
 		} else {
 			s.CtxLog(ctx, fmt.Sprintf("Shutdown complete for %v", message.GetJob().GetName()))
 		}
