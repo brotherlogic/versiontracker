@@ -442,6 +442,9 @@ func (s *Server) GetState() []*pbg.State {
 }
 
 func (s *Server) bounceJobs() {
+	// Wait 5 minutes for the jobs to come up
+	time.Sleep(time.Minute * 5)
+
 	for !s.LameDuck {
 		s.procJobs()
 		time.Sleep(time.Hour)
@@ -465,16 +468,16 @@ func (s *Server) procJobs() {
 	if err == nil {
 		_, err1 := s.NewJob(ctx, &pb.NewJobRequest{Version: lvgbs})
 		if err1 != nil {
-			s.Log(fmt.Sprintf("Error tracking gbs: %v", err))
+			s.CtxLog(ctx, fmt.Sprintf("Error tracking gbs: %v", err))
 		}
 	} else {
 		_, err1 := s.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: job}})
 		if err1 != nil {
-			s.Log(fmt.Sprintf("Error tracking gbs: %v", err))
+			s.CtxLog(ctx, fmt.Sprintf("Error tracking gbs: %v", err))
 		}
 	}
 
-	s.Log(fmt.Sprintf("Working on %v jobs", len(jobs)))
+	s.CtxLog(ctx, fmt.Sprintf("Working on %v jobs", len(jobs)))
 	time.Sleep(time.Second * 2)
 	for _, j := range jobs {
 		s.Log(fmt.Sprintf("Working on %v", j))
