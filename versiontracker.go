@@ -287,9 +287,6 @@ func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version, job str
 }
 
 func (s *Server) doShutdown(f string) error {
-	ctx, cancel := utils.ManualContext(fmt.Sprintf("vt-shutdown-%v", message.GetJob().GetName()), time.Minute)
-	defer cancel()
-
 	data, err := ioutil.ReadFile(f)
 	if err != nil {
 		return status.Errorf(codes.DataLoss, "%v", err)
@@ -299,6 +296,10 @@ func (s *Server) doShutdown(f string) error {
 	if err != nil {
 		return status.Errorf(codes.DataLoss, "%v", err)
 	}
+
+	ctx, cancel := utils.ManualContext(fmt.Sprintf("vt-shutdown-%v", message.GetJob().GetName()), time.Minute)
+	defer cancel()
+
 	s.CtxLog(ctx, fmt.Sprintf("Now Shutting down %v -> %v", f, message))
 
 	list, err := s.slave.listversions(ctx, message.GetJob().GetName())
@@ -344,7 +345,6 @@ func (s *Server) runShutdown() {
 	for !s.LameDuck {
 		files, err := ioutil.ReadDir("/media/scratch/versiontracker-shutdown")
 		if err != nil {
-			s.Log(fmt.Sprintf("Unable to read dir: %v", err))
 			break
 		}
 
@@ -352,12 +352,9 @@ func (s *Server) runShutdown() {
 
 		if len(files) > 0 {
 			err := s.doShutdown("/media/scratch/versiontracker-shutdown/" + files[0].Name())
-			s.Log(fmt.Sprintf("Done the shutdown: %v", err))
 			if err != nil {
 				if status.Convert(err).Code() == codes.DataLoss {
 					os.Remove("/media/scratch/versiontracker-shutdown/" + files[0].Name())
-				} else {
-					s.Log(fmt.Sprintf("Cannot shutdown %v", err))
 				}
 			} else {
 				os.Remove("/media/scratch/versiontracker-shutdown/" + files[0].Name())
@@ -481,7 +478,7 @@ func (s *Server) procJobs() {
 	s.CtxLog(ctx, fmt.Sprintf("Working on %v jobs", len(jobs)))
 	time.Sleep(time.Second * 2)
 	for _, j := range jobs {
-		s.Log(fmt.Sprintf("Working on %v", j))
+		s.CtxLog(ctx, fmt.Sprintf("Working on %v", j))
 		ctx, cancel2 := utils.ManualContext("versiontrack-init2", time.Minute)
 		defer cancel2()
 
@@ -492,7 +489,7 @@ func (s *Server) procJobs() {
 
 			_, err2 := s.NewJob(ctx, &pb.NewJobRequest{Version: lv})
 			if err2 != nil {
-				s.Log(fmt.Sprintf("Error on new with local job (%v): %v", lv, err2))
+				s.CtxLog(ctx, fmt.Sprintf("Error on new with local job (%v): %v", lv, err2))
 			}
 		} else {
 			ctx, cancel3 := utils.ManualContext("versiontrack-init4", time.Minute)
@@ -500,13 +497,13 @@ func (s *Server) procJobs() {
 
 			_, err2 := s.NewJob(ctx, &pb.NewJobRequest{Version: &pbbs.Version{Job: j}})
 			if err2 != nil {
-				s.Log(fmt.Sprintf("Error on new job (%v): %v", j, err2))
+				s.CtxLog(ctx, fmt.Sprintf("Error on new job (%v): %v", j, err2))
 			}
 
 		}
 	}
 
-	s.Log("All jobs processed!")
+	s.CtxLog(ctx, "All jobs processed!")
 }
 
 func main() {

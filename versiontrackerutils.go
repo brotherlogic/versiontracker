@@ -29,10 +29,10 @@ func (s *Server) buildVersionMap(ctx context.Context) error {
 		lv, _ := s.builder.getLocal(ctx, job)
 		nv, err := s.builder.getRemote(ctx, job)
 		if lv.GetVersion() != nv.GetVersion() {
-			s.Log(fmt.Sprintf("%v is equal %v but %v", job.GetName(), lv.GetVersion() != nv.GetVersion(), time.Now().Sub(time.Unix(nv.GetLastBuildTime(), 0))))
+			s.CtxLog(ctx, fmt.Sprintf("%v is equal %v but %v", job.GetName(), lv.GetVersion() != nv.GetVersion(), time.Now().Sub(time.Unix(nv.GetLastBuildTime(), 0))))
 		}
 		if err == nil && lv.GetVersion() != nv.GetVersion() && time.Now().Sub(time.Unix(nv.GetLastBuildTime(), 0)) < time.Hour*24 && lv.GetVersionDate() < nv.GetVersionDate() {
-			s.Log(fmt.Sprintf("%v -> %v,%v", job.GetName(), lv.GetVersion(), nv.GetVersion()))
+			s.CtxLog(ctx, fmt.Sprintf("%v -> %v,%v", job.GetName(), lv.GetVersion(), nv.GetVersion()))
 			s.needsCopy[job.GetName()] = nv
 		}
 	}
@@ -102,7 +102,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 		}
 	}
 
-	s.Log(fmt.Sprintf("Working with %v and %v and %v -> %v, %v", cv, nv, lv, err, err2))
+	s.CtxLog(ctx, fmt.Sprintf("Working with %v and %v and %v -> %v, %v", cv, nv, lv, err, err2))
 	// Force a copy if local is wrong
 	if err2 != nil {
 		if nv != nil {
@@ -112,7 +112,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 	}
 
 	if err == nil {
-		s.Log(fmt.Sprintf("Got %v but %v", lv, nv))
+		s.CtxLog(ctx, fmt.Sprintf("Got %v but %v", lv, nv))
 		remote.With(prometheus.Labels{"server": name, "versiondate": fmt.Sprintf("%v", time.Unix(nv.GetVersionDate(), 0))}).Inc()
 		if nv.GetVersionDate() > lv.GetVersionDate() {
 			return s.doCopy(ctx, nv, lv)
