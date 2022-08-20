@@ -287,6 +287,9 @@ func (p *prodSlave) shutdown(ctx context.Context, version *pbbs.Version, job str
 }
 
 func (s *Server) doShutdown(f string) error {
+	ctx, cancel := utils.ManualContext(fmt.Sprintf("vt-shutdown-%v", message.GetJob().GetName()), time.Minute)
+	defer cancel()
+
 	data, err := ioutil.ReadFile(f)
 	if err != nil {
 		return status.Errorf(codes.DataLoss, "%v", err)
@@ -296,10 +299,8 @@ func (s *Server) doShutdown(f string) error {
 	if err != nil {
 		return status.Errorf(codes.DataLoss, "%v", err)
 	}
-	s.Log(fmt.Sprintf("Now Shutting down %v -> %v", f, message))
+	s.CtxLog(ctx, fmt.Sprintf("Now Shutting down %v -> %v", f, message))
 
-	ctx, cancel := utils.ManualContext(fmt.Sprintf("vt-shutdown-%v", message.GetJob().GetName()), time.Minute)
-	defer cancel()
 	list, err := s.slave.listversions(ctx, message.GetJob().GetName())
 	if err != nil {
 		return err
