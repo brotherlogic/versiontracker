@@ -5,10 +5,10 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+	"google.golang.org/protobuf/proto"
 
 	pbfc "github.com/brotherlogic/filecopier/proto"
 	pb "github.com/brotherlogic/versiontracker/proto"
@@ -22,7 +22,7 @@ var (
 	}, []string{"server", "versiondate"})
 )
 
-//NewVersion a new version is available
+// NewVersion a new version is available
 func (s *Server) NewVersion(ctx context.Context, req *pb.NewVersionRequest) (*pb.NewVersionResponse, error) {
 	if req.GetVersion().GetBitSize() == int32(s.Bits) {
 		s.CtxLog(ctx, fmt.Sprintf("Looking for %v", req.GetVersion().GetJob().GetName()))
@@ -39,14 +39,14 @@ func (s *Server) NewVersion(ctx context.Context, req *pb.NewVersionRequest) (*pb
 	return &pb.NewVersionResponse{}, nil
 }
 
-//NewJob alerts us to a new job running
+// NewJob alerts us to a new job running
 func (s *Server) NewJob(ctx context.Context, req *pb.NewJobRequest) (*pb.NewJobResponse, error) {
 	s.tracking[req.GetVersion().GetJob().GetName()] = req.GetVersion()
 	tracking.With(prometheus.Labels{"server": req.GetVersion().GetJob().GetName(), "versiondate": fmt.Sprintf("%v", time.Unix(req.GetVersion().GetVersionDate(), 0))}).Set(float64(len(s.tracking)))
 	return &pb.NewJobResponse{}, s.validateVersion(ctx, req.GetVersion().GetJob().GetName())
 }
 
-//Callback processes the callback from file copier
+// Callback processes the callback from file copier
 func (s *Server) Callback(ctx context.Context, req *pbfc.CallbackRequest) (*pbfc.CallbackResponse, error) {
 	version, ok := s.keyTrack[req.GetKey()]
 	oldversion, _ := s.oldVersion[req.GetKey()]

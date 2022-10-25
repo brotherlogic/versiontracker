@@ -10,13 +10,13 @@ import (
 	"time"
 
 	"github.com/brotherlogic/goserver"
-	"github.com/golang/protobuf/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/proto"
 
 	pbbs "github.com/brotherlogic/buildserver/proto"
 	dspb "github.com/brotherlogic/dstore/proto"
@@ -366,7 +366,7 @@ func (s *Server) runShutdown() {
 	}
 }
 
-//Server main server type
+// Server main server type
 type Server struct {
 	*goserver.GoServer
 	slave      slave
