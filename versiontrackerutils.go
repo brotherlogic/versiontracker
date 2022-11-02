@@ -73,7 +73,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 		if err != nil {
 			return err
 		}
-	} else if nv != nil && time.Since(time.Unix(nv.GetVersionDate(), 0)) > time.Hour*24*30 {
+	} else if nv != nil && time.Since(time.Unix(nv.GetVersionDate(), 0)) > time.Hour*24 {
 		go func() {
 			ctx, cancel := utils.ManualContext(fmt.Sprintf("versiontracker-%v-rebuild", name), time.Minute*10)
 			defer cancel()
@@ -103,6 +103,12 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 	}
 
 	s.CtxLog(ctx, fmt.Sprintf("Working with %v and %v and %v -> %v, %v", cv, nv, lv, err, err2))
+
+	// Do a remote build if we don't have anything
+	if cv == nil && nv == nil {
+		s.builder
+	}
+
 	// Force a copy if local is wrong
 	if err2 != nil {
 		if nv != nil {
