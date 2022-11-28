@@ -106,7 +106,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 
 	// Do a remote build if we don't have anything
 	if cv == nil && nv == nil {
-		s.builder
+		s.builder.build(ctx, cv.GetJob())
 	}
 
 	// Force a copy if local is wrong

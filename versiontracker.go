@@ -125,6 +125,7 @@ func (p *prodCopier) copy(ctx context.Context, v *pbbs.Version, key int64) error
 type builder interface {
 	getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error)
 	getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error)
+	build(ctx context.Context, job *pbgbs.Job) error
 }
 
 type prodBuilder struct {
@@ -142,6 +143,18 @@ var (
 		Help: "The size of the tracking queue",
 	}, []string{"server", "reqstr", "resp"})
 )
+
+func (p *prodBuilder) build(ctx context.Context, job *pbgbs.Job) error {
+	conn, err := p.dial(ctx, "buildserver")
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	client := pbbs.NewBuildServiceClient(conn)
+	_, err = client.Build(ctx, &pbbs.BuildRequest{Job: job})
+	return err
+}
 
 func (p *prodBuilder) getRemote(ctx context.Context, job *pbgbs.Job) (*pbbs.Version, error) {
 	p.log(ctx, fmt.Sprintf("Getting versions: %v with %v", job, p.bits))
