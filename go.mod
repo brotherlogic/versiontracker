@@ -23,7 +23,7 @@ require (
 	github.com/brotherlogic/datastore v0.0.0-20221128120426-2b8c2cde11f2 // indirect
 	github.com/brotherlogic/githubcard v0.0.0-20221128065533-3d7968b38c7c // indirect
 	github.com/brotherlogic/lock v0.0.0-20221128053434-df699072c900 // indirect
-	github.com/brotherlogic/logging v0.0.0-20221128054449-cb7448de2311 // indirect
+	github.com/brotherlogic/logging v0.0.0-20221129060719-acd8bf372ed1 // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
