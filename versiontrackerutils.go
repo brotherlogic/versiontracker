@@ -73,7 +73,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 		if err != nil {
 			return err
 		}
-	} else if nv != nil && time.Since(time.Unix(nv.GetVersionDate(), 0)) > time.Hour*24 {
+	} else if nv != nil && time.Since(time.Unix(nv.GetVersionDate(), 0)) > time.Hour*24*7 {
 		go func() {
 			ctx, cancel := utils.ManualContext(fmt.Sprintf("versiontracker-%v-rebuild", name), time.Minute*10)
 			defer cancel()
