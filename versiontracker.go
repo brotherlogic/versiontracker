@@ -496,6 +496,7 @@ func (s *Server) procJobs() {
 		defer cancel2()
 
 		lv, err := s.builder.getLocal(ctx, j)
+		s.CtxLog(ctx, fmt.Sprintf("Local: %v and %v", lv, err))
 		if err == nil {
 			ctx, cancel3 := utils.ManualContext("versiontrack-init3", time.Minute)
 			defer cancel3()
