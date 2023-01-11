@@ -332,6 +332,10 @@ func (s *Server) doShutdown(f string) error {
 		}
 		conn, err := s.FDialSpecificServer(ctx, message.GetJob().GetName(), s.Registry.Identifier)
 		if err != nil {
+			// If the job we are looking for is unavailable, let's not try to shut it down
+			if status.Code(err) == codes.Unavailable {
+				status.Errorf(codes.DataLoss, "Cannot find as a running server %v", err)
+			}
 			return err
 		}
 		defer conn.Close()
