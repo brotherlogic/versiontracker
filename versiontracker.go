@@ -202,6 +202,10 @@ func (p *prodBuilder) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Versi
 		version.Version = elems[0]
 	}
 
+	if version.GetJob() == nil {
+		version.Job = job
+	}
+
 	return version, nil
 }
 
