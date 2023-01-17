@@ -345,6 +345,7 @@ func (s *Server) doShutdown(f string) error {
 		if err != nil && status.Convert(err).Code() != codes.Unavailable && status.Convert(err).Code() != codes.FailedPrecondition {
 			s.CtxLog(ctx, fmt.Sprintf("Failed shutdown for %v -> %v", message.GetJob().GetName(), err))
 			s.RaiseIssue("Failed Shutdown for "+message.GetJob().GetName(), fmt.Sprintf("%v -> %v on %v", err, message.GetJob().GetName(), s.Registry.Identifier))
+			return status.Errorf(codes.DataLoss, "Silent shutdown: %w", err)
 		} else {
 			s.CtxLog(ctx, fmt.Sprintf("Shutdown complete for %v", message.GetJob().GetName()))
 		}
