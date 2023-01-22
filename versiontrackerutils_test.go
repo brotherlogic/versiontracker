@@ -62,6 +62,10 @@ func (t *testBuild) getLocal(ctx context.Context, job *pbgbs.Job) (*pbbs.Version
 	return &pbbs.Version{Version: "two"}, nil
 }
 
+func (t *testBuild) build(ctx context.Context, job *pbgbs.Job) error {
+	return nil
+}
+
 func TestBasicPull(t *testing.T) {
 	s := InitTest()
 	s.track(context.Background())
