@@ -334,7 +334,7 @@ func (s *Server) doShutdown(f string) error {
 		if err != nil {
 			// If the job we are looking for is unavailable, let's not try to shut it down
 			if status.Code(err) == codes.Unavailable {
-				return status.Errorf(codes.DataLoss, "Cannot find as a running server %v", err)
+				return status.Errorf(codes.DataLoss, "cannot find as a running server %v", err)
 			}
 			return err
 		}
