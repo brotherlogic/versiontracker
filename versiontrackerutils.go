@@ -53,6 +53,11 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 	nv, err := s.builder.getRemote(ctx, cv.GetJob())
 	lv, err2 := s.builder.getLocal(ctx, cv.GetJob())
 
+	//If we can't read remote, we can't copy
+	if err != nil {
+		return err
+	}
+
 	config, err := s.loadConfig(ctx)
 	if err != nil {
 		return err
