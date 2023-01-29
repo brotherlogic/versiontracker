@@ -1,6 +1,6 @@
 module github.com/brotherlogic/versiontracker
 
-go 1.19
+go 1.18
 
 require (
 	github.com/brotherlogic/builder v0.0.0-20230129012215-16e11f04a1b8
@@ -36,9 +36,9 @@ require (
 	github.com/prometheus/procfs v0.9.0 // indirect
 	github.com/struCoder/pidusage v0.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.37.0 // indirect
-	go.opentelemetry.io/otel v1.12.0 // indirect
-	go.opentelemetry.io/otel/metric v0.35.0 // indirect
-	go.opentelemetry.io/otel/trace v1.12.0 // indirect
+	go.opentelemetry.io/otel v1.11.2 // indirect
+	go.opentelemetry.io/otel/metric v0.34.0 // indirect
+	go.opentelemetry.io/otel/trace v1.11.2 // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/genproto v0.0.0-20230127162408-596548ed4efa // indirect
