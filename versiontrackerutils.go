@@ -69,7 +69,7 @@ func (s *Server) validateVersion(ctx context.Context, name string) error {
 
 	if nv != nil && time.Since(time.Unix(nv.GetVersionDate(), 0)) > time.Hour*24*60 && config.BuildBugs[cv.GetJob().GetName()] == 0 {
 
-		issue, err := s.ImmediateIssue(ctx, "Build needed", fmt.Sprintf("According to %v %v was last built %v", s.Registry.Identifier, cv.GetJob().GetName(), time.Unix(lv.GetVersionDate(), 0)), true)
+		issue, err := s.ImmediateIssue(ctx, "Build needed", fmt.Sprintf("According to %v %v was last built %v", s.Registry.Identifier, cv.GetJob().GetName(), time.Unix(lv.GetVersionDate(), 0)), true, false)
 		if err != nil && status.Convert(err).Code() != codes.ResourceExhausted {
 			return err
 		}
