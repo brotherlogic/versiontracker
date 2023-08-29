@@ -2128,8 +2128,9 @@ github.com/brotherlogic/lock v0.0.0-20230731232351-f011f2d7e22a/go.mod h1:GxnNUw
 github.com/brotherlogic/lock v0.0.0-20230808002205-d5c7afd60a1e/go.mod h1:F1Tk7fhgeP+KqOEPr/7NjaR0la9ynyoi/roD4Xo1dgY=
 github.com/brotherlogic/lock v0.0.0-20230815011509-8fe9d7df9061/go.mod h1:H8xi38kaL7dz06Aw1cdYUftxSbnJhJz5vN6drE41cKE=
 github.com/brotherlogic/lock v0.0.0-20230822023015-88db4abe205b/go.mod h1:lrir2i53xJRu4EkyfUE/D9MtWSHKmFF/wPECwRbBn9o=
-github.com/brotherlogic/lock v0.0.0-20230829042128-86a9d68f0f39 h1:vBCuSIJVtySTr1ov7GcjyG3iJ13QwxGs/ULtuSu7QwY=
 github.com/brotherlogic/lock v0.0.0-20230829042128-86a9d68f0f39/go.mod h1:89Y3UhrBBun1fYz/BSK1RUC1ccE3X5nVjPSisj8y7YU=
+github.com/brotherlogic/lock v0.0.0-20230829102435-c24bfc4e8a8e h1:SmBh0m19uFHOaEBf/tfVVnWuNzP0FxLmIfDqti4Xz5g=
+github.com/brotherlogic/lock v0.0.0-20230829102435-c24bfc4e8a8e/go.mod h1:OOQxaJZgOB9805HbSlNhnZl6moNMenjRGYgw4Rlanpc=
 github.com/brotherlogic/logging v0.0.0-20200903150238-67a07e215efe/go.mod h1:cHEM7v1fl8VwwyN4qcrh8hQHR+XNT+xHI4+yOr4l8Wg=
 github.com/brotherlogic/logging v0.0.0-20210606012857-db059830d1dc/go.mod h1:FOXFywySb2dOOhsEFIwxniCxGJltgA395Dhzp2lFXYI=
 github.com/brotherlogic/logging v0.0.0-20210609015032-e6d0ef792137/go.mod h1:FOXFywySb2dOOhsEFIwxniCxGJltgA395Dhzp2lFXYI=
@@ -3347,6 +3348,7 @@ github.com/brotherlogic/versiontracker v0.0.0-20230808001313-00dbbecaf213/go.mod
 github.com/brotherlogic/versiontracker v0.0.0-20230815001921-b314c0c0c760/go.mod h1:tQIKFkJcjhLzAP+khGjMS9RQ2MjbRwZ/F+Gl5RCk06M=
 github.com/brotherlogic/versiontracker v0.0.0-20230822010758-0d3b454bc54f/go.mod h1:EQFQvymlXx/hRVyD0/X/haS2pmILQeE9TUz3eDq1vNM=
 github.com/brotherlogic/versiontracker v0.0.0-20230829013942-35b2ce58624b/go.mod h1:OSf+5+fbl+xr5qIQGNI+IzkHLMrPEhdr+aN4cW6z4SQ=
+github.com/brotherlogic/versiontracker v0.0.0-20230829051955-9194830348bc/go.mod h1:YPq1Y/ZDlXFIQ4BxcQL8Vh4xvsxAikbakTylRBOhLok=
 github.com/bsm/ginkgo/v2 v2.5.0/go.mod h1:AiKlXPm7ItEHNc/2+OkrNG4E0ITzojb9/xWzvQ9XZ9w=
 github.com/bsm/gomega v1.20.0/go.mod h1:JifAceMQ4crZIWYUKrlGcmbN3bqHogVTADMD2ATsbwk=
 github.com/buger/jsonparser v1.1.1/go.mod h1:6RYKKt7H4d4+iWqouImQ9R2FZql3VbhNgx27UK13J/0=
