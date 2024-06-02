@@ -31,6 +31,7 @@ func TestNewVersionWithUpdate(t *testing.T) {
 
 func TestCallback(t *testing.T) {
 	s := InitTest()
+
 	s.keyTrack[int64(123)] = &pbbs.Version{}
 
 	_, err := s.Callback(context.Background(), &pbfc.CallbackRequest{Key: int64(123)})

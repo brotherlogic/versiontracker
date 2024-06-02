@@ -16,14 +16,17 @@ import (
 
 func InitTest() *Server {
 	s := Init()
+
 	s.slave = &testSlave{}
 	s.builder = &testBuild{}
 	s.copier = &testCopy{}
 	s.SkipLog = true
+	s.SkipIssue = true
 	s.GoServer.KSclient = *keystoreclient.GetTestClient("./testing")
 	s.Registry = &pbd.RegistryEntry{Identifier: "blah"}
 	s.base = ".tmp/"
 	os.Mkdir(".tmp", 0700)
+
 	return s
 }
 
