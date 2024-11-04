@@ -10,7 +10,7 @@ require (
 	github.com/brotherlogic/discovery v0.0.0-20241102203227-4dc2733fc44e
 	github.com/brotherlogic/dstore v0.0.0-20241102021053-fd51520579ab
 	github.com/brotherlogic/filecopier v0.0.0-20241102055108-ea3ad9496108
-	github.com/brotherlogic/gobuildslave v0.0.0-20241028082414-9168a2af79e3
+	github.com/brotherlogic/gobuildslave v0.0.0-20241104084926-a33b425f3128
 	github.com/brotherlogic/goserver v0.0.0-20240826215223-fccbac46b3d4
 	github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126
 	github.com/golang/protobuf v1.5.4
