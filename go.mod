@@ -23,10 +23,10 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/datastore v0.0.0-20240830190304-3b849e438317 // indirect
-	github.com/brotherlogic/githubcard v0.0.0-20241201052946-dd5f71ec1e86 // indirect
+	github.com/brotherlogic/githubcard v0.0.0-20241201053548-fc50250f4324 // indirect
 	github.com/brotherlogic/githubridge v0.2816.0 // indirect
 	github.com/brotherlogic/lock v0.0.0-20241201053115-6bcd7ebdb5b3 // indirect
-	github.com/brotherlogic/logging v0.0.0-20241201052435-f6bbfd09e6c5 // indirect
+	github.com/brotherlogic/logging v0.0.0-20241201053232-31425f61d7aa // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
