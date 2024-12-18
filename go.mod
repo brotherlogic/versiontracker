@@ -13,7 +13,7 @@ require (
 	github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126
 	github.com/golang/protobuf v1.5.4
 	github.com/prometheus/client_golang v1.20.5
-	golang.org/x/net v0.32.0
+	golang.org/x/net v0.33.0
 	google.golang.org/grpc v1.69.2
 	google.golang.org/protobuf v1.36.0
 )
