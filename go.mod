@@ -15,13 +15,13 @@ require (
 	github.com/prometheus/client_golang v1.20.5
 	golang.org/x/net v0.33.0
 	google.golang.org/grpc v1.69.2
-	google.golang.org/protobuf v1.36.0
+	google.golang.org/protobuf v1.36.1
 )
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/datastore v0.0.0-20241220230045-434035a99d2b // indirect
-	github.com/brotherlogic/githubcard v0.0.0-20241223094254-cecf9a3824ed // indirect
+	github.com/brotherlogic/githubcard v0.0.0-20241223134345-69ba582c9307 // indirect
 	github.com/brotherlogic/githubridge v0.2824.0 // indirect
 	github.com/brotherlogic/lock v0.0.0-20241217020620-bb98363cbe7e // indirect
 	github.com/brotherlogic/logging v0.0.0-20241217021446-525605902c38 // indirect
