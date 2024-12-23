@@ -12,8 +12,8 @@ github.com/brotherlogic/dstore v0.0.0-20241223104659-081cc9e0225c h1:D+SgUmDjMQR
 github.com/brotherlogic/dstore v0.0.0-20241223104659-081cc9e0225c/go.mod h1:B5yUxiRqAhrOfJNdzRhGWyfhqGy9Uc93dlV7C6GOkro=
 github.com/brotherlogic/filecopier v0.0.0-20241217014139-744b080ae0dc h1:QFXi7xrW5GaQCX0MULFDK16r5PW/9eZqD5Utg1n0HhE=
 github.com/brotherlogic/filecopier v0.0.0-20241217014139-744b080ae0dc/go.mod h1:315D015FsembdRcMwqr3XnuCuDQiXmmrpl/5ttb+r38=
-github.com/brotherlogic/githubcard v0.0.0-20241223094254-cecf9a3824ed h1:K2UCLVcEgtbZ6BokP9Uh2ksHAe3/HdJmLzw8H9r3N/Y=
-github.com/brotherlogic/githubcard v0.0.0-20241223094254-cecf9a3824ed/go.mod h1:yvgFAnHSOZTulmF/NrLOcLJSgF2xbZom3szf2r+UdA0=
+github.com/brotherlogic/githubcard v0.0.0-20241223134345-69ba582c9307 h1:X56ISmu3ThzkzUSmZc0dZh4o8MVV8Lpgjfr9pc0tALk=
+github.com/brotherlogic/githubcard v0.0.0-20241223134345-69ba582c9307/go.mod h1:+A9WNKJkF+1TgF0Jo4aB32vRRrdXEqR+RZXoTOWDA04=
 github.com/brotherlogic/githubridge v0.2824.0 h1:LJqWgAgM4lWQwwZft/Aqq33sDXUPHq23FrG7WCOhiGQ=
 github.com/brotherlogic/githubridge v0.2824.0/go.mod h1:SRsJ/bqK7bGMI4Fe3MCJqFwga1ZoSVbrjZMJIaoRUUA=
 github.com/brotherlogic/gobuildslave v0.0.0-20241111085829-8d4e5069a7fd h1:KzJ2qjTvIW7NtUavqJaSxTUMHW1zNf/FjU1RqAVggNw=
@@ -90,7 +90,7 @@ google.golang.org/genproto/googleapis/rpc v0.0.0-20241219192143-6b3ec007d9bb h1:
 google.golang.org/genproto/googleapis/rpc v0.0.0-20241219192143-6b3ec007d9bb/go.mod h1:lcTa1sDdWEIHMWlITnIczmw5w60CF9ffkb8Z+DVmmjA=
 google.golang.org/grpc v1.69.2 h1:U3S9QEtbXC0bYNvRtcoklF3xGtLViumSYxWykJS+7AU=
 google.golang.org/grpc v1.69.2/go.mod h1:vyjdE6jLBI76dgpDojsFGNaHlxdjXN9ghpnd2o7JGZ4=
-google.golang.org/protobuf v1.36.0 h1:mjIs9gYtt56AzC4ZaffQuh88TZurBGhIJMBZGSxNerQ=
-google.golang.org/protobuf v1.36.0/go.mod h1:9fA7Ob0pmnwhb644+1+CVWFRbNajQ6iRojtC/QF5bRE=
+google.golang.org/protobuf v1.36.1 h1:yBPeRvTftaleIgM3PZ/WBIZ7XM/eEYAaEyCwvyjq/gk=
+google.golang.org/protobuf v1.36.1/go.mod h1:9fA7Ob0pmnwhb644+1+CVWFRbNajQ6iRojtC/QF5bRE=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
