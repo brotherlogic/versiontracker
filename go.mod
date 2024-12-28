@@ -7,7 +7,7 @@ require (
 	github.com/brotherlogic/buildserver v0.0.0-20241228015410-96518d2bc90e
 	github.com/brotherlogic/discovery v0.0.0-20241109204028-02908558af09
 	github.com/brotherlogic/dstore v0.0.0-20241228010536-d4a5b032e478
-	github.com/brotherlogic/filecopier v0.0.0-20241228014829-72f5c850a39e
+	github.com/brotherlogic/filecopier v0.0.0-20241228030628-6de1ca2592a3
 	github.com/brotherlogic/gobuildslave v0.0.0-20241111085829-8d4e5069a7fd
 	github.com/brotherlogic/goserver v0.0.0-20240826215223-fccbac46b3d4
 	github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126
@@ -23,8 +23,8 @@ require (
 	github.com/brotherlogic/datastore v0.0.0-20241220230045-434035a99d2b // indirect
 	github.com/brotherlogic/githubcard v0.0.0-20241228025211-032cf6c44aae // indirect
 	github.com/brotherlogic/githubridge v0.2824.0 // indirect
-	github.com/brotherlogic/lock v0.0.0-20241228004510-21ff0c367397 // indirect
-	github.com/brotherlogic/logging v0.0.0-20241228010627-bbe0653b649b // indirect
+	github.com/brotherlogic/lock v0.0.0-20241228025359-2e05b4babee4 // indirect
+	github.com/brotherlogic/logging v0.0.0-20241228025423-4d21190feb3b // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
