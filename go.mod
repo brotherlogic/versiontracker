@@ -3,7 +3,7 @@ module github.com/brotherlogic/versiontracker
 go 1.23.2
 
 require (
-	github.com/brotherlogic/builder v0.0.0-20250102203138-643be6b7e1b9
+	github.com/brotherlogic/builder v0.0.0-20250102214549-eb0032b82427
 	github.com/brotherlogic/buildserver v0.0.0-20250102204936-00eca62ed7f7
 	github.com/brotherlogic/discovery v0.0.0-20241109204028-02908558af09
 	github.com/brotherlogic/dstore v0.0.0-20250102200438-7aa2ed930fac
@@ -24,7 +24,7 @@ require (
 	github.com/brotherlogic/githubcard v0.0.0-20250102205354-f1ac421bd835 // indirect
 	github.com/brotherlogic/githubridge v0.2824.0 // indirect
 	github.com/brotherlogic/lock v0.0.0-20250102204720-b7596af6cb3c // indirect
-	github.com/brotherlogic/logging v0.0.0-20250102194447-4cfd59ddbb17 // indirect
+	github.com/brotherlogic/logging v0.0.0-20250102213534-332cef18eb48 // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
