@@ -133,7 +133,7 @@ type prodBuilder struct {
 	server     string
 	bits       int32
 	log        func(ctx context.Context, message string)
-	raiseIssue func(title, body string)
+	raiseIssue func(title, body string, labels ...string)
 }
 
 var (
