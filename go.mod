@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/brotherlogic/builder v0.0.0-20250315004617-5f8bbfeeb426
-	github.com/brotherlogic/buildserver v0.0.0-20250315031412-9efda1c2ccf9
+	github.com/brotherlogic/buildserver v0.0.0-20250315033830-e37bceabd9d3
 	github.com/brotherlogic/discovery v0.0.0-20241109204028-02908558af09
 	github.com/brotherlogic/dstore v0.0.0-20250315032432-88600ccaaf97
 	github.com/brotherlogic/filecopier v0.0.0-20250315032624-8f5857c6b206
@@ -21,7 +21,7 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/datastore v0.0.0-20250313015544-917b63bdd6ff // indirect
-	github.com/brotherlogic/githubcard v0.0.0-20250315015157-b89fcdfd89ec // indirect
+	github.com/brotherlogic/githubcard v0.0.0-20250315033542-5f78c0c8a202 // indirect
 	github.com/brotherlogic/githubridge v0.2849.0 // indirect
 	github.com/brotherlogic/lock v0.0.0-20250315033344-439cf83c2482 // indirect
 	github.com/brotherlogic/logging v0.0.0-20250315032647-b824dbcff2d0 // indirect
