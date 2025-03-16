@@ -7,8 +7,8 @@ require (
 	github.com/brotherlogic/buildserver v0.0.0-20250316180832-85d7745a9b9d
 	github.com/brotherlogic/discovery v0.0.0-20241109204028-02908558af09
 	github.com/brotherlogic/dstore v0.0.0-20250316173056-3c13305e86c9
-	github.com/brotherlogic/filecopier v0.0.0-20250316181901-23c652b418c2
-	github.com/brotherlogic/gobuildslave v0.0.0-20250316181435-86659634be6a
+	github.com/brotherlogic/filecopier v0.0.0-20250316183117-d41daba33a94
+	github.com/brotherlogic/gobuildslave v0.0.0-20250316183120-92574362b9ed
 	github.com/brotherlogic/goserver v0.0.0-20250123145056-95c6fbb2310a
 	github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126
 	github.com/golang/protobuf v1.5.4
