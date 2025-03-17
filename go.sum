@@ -1,7 +1,7 @@
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
-github.com/brotherlogic/builder v0.0.0-20250317142038-b80cbfe66507 h1:gKd15dzEhiRygb880bOldJNUsYgKp4DTdKwVYL5ioO4=
-github.com/brotherlogic/builder v0.0.0-20250317142038-b80cbfe66507/go.mod h1:kJKysUf92gAhJdXvjHOmcnR2N6Ec1rA++U57dLVrPrs=
+github.com/brotherlogic/builder v0.0.0-20250317151518-c480ab85169b h1:dVQP6ZlhKAY5RkuOymWFaJbR4VWpQxcs01bJgoMQe8M=
+github.com/brotherlogic/builder v0.0.0-20250317151518-c480ab85169b/go.mod h1:VSN/wuXhB2/2gKQbqtoG95cwqDwNk+e+RQ1fsfRiTsQ=
 github.com/brotherlogic/buildserver v0.0.0-20250317114833-498af2d9fda8 h1:BWTx6E4cgiKoENNSvW8i9KYts5SLz55rhwLZTDvZhUc=
 github.com/brotherlogic/buildserver v0.0.0-20250317114833-498af2d9fda8/go.mod h1:HPPl3Lyt5RraFG6aO6jvDpvLqNSjGJbVtinQ5pVCtx0=
 github.com/brotherlogic/datastore v0.0.0-20250313015544-917b63bdd6ff h1:8FbGrnfXtiKkqpsvd2zZLHIr6VB2A7nN9q8Zho0uJXQ=
@@ -24,8 +24,8 @@ github.com/brotherlogic/goserver v0.0.0-20250123145056-95c6fbb2310a h1:rni9hUmBP
 github.com/brotherlogic/goserver v0.0.0-20250123145056-95c6fbb2310a/go.mod h1:QbrdZ+d2/FKUG5c9BmQS3yXssOTMOb0nlZyZNcS0UMM=
 github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126 h1:6e12Cl80VtMghgEyTyx1tZB1mUSSBHeLhKvikwb7kIQ=
 github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126/go.mod h1:2JK2kJhI5ler7e7M1WtIpIkiNGG2qy8V6X7VZLCsd5k=
-github.com/brotherlogic/lock v0.0.0-20250317143631-3151b02bc087 h1:TKwKZ/UB5F3lrl1SxfBOAJBdeRjxHM2Y+Kmzn8YaC+g=
-github.com/brotherlogic/lock v0.0.0-20250317143631-3151b02bc087/go.mod h1:PDeSZhU3hCm6Di2CFrXO+8Gb5eEptiSq2dleArj6/Dw=
+github.com/brotherlogic/lock v0.0.0-20250317144750-abcd1a12346b h1:j12MTlQIZ6HEvt7C/6NYbWffmBq5Ar1gdgq+9NnBh1Y=
+github.com/brotherlogic/lock v0.0.0-20250317144750-abcd1a12346b/go.mod h1:FqXF+aMNpdTHUFqZDCcCVDnSqnVG4mH4iQj9T08FKVU=
 github.com/brotherlogic/logging v0.0.0-20250317144005-86f2f3587d81 h1:joY4rKldA88650P3jBEFsyJcLxR6BSQkK35CpFySU6o=
 github.com/brotherlogic/logging v0.0.0-20250317144005-86f2f3587d81/go.mod h1:nbdLGfWfAfOZ7WyJ1ypctzw9OiVL6xvbVCrf0MSBsBg=
 github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 h1:hxu2T9JspE76sL3XAx/CNtA9bOO6QCEJkyG9rBXFEVA=
