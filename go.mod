@@ -7,8 +7,8 @@ require (
 	github.com/brotherlogic/buildserver v0.0.0-20250318071640-27aebaf10444
 	github.com/brotherlogic/discovery v0.0.0-20241109204028-02908558af09
 	github.com/brotherlogic/dstore v0.0.0-20250318073815-dca25c75c562
-	github.com/brotherlogic/filecopier v0.0.0-20250318073736-593e76920a7e
-	github.com/brotherlogic/gobuildslave v0.0.0-20250318075849-00756caf550f
+	github.com/brotherlogic/filecopier v0.0.0-20250318080215-1e0f9b3e0548
+	github.com/brotherlogic/gobuildslave v0.0.0-20250318082604-331947341bb4
 	github.com/brotherlogic/goserver v0.0.0-20250123145056-95c6fbb2310a
 	github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126
 	github.com/golang/protobuf v1.5.4
@@ -21,9 +21,9 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/datastore v0.0.0-20250313015544-917b63bdd6ff // indirect
-	github.com/brotherlogic/githubcard v0.0.0-20250318055855-d8984fc33004 // indirect
+	github.com/brotherlogic/githubcard v0.0.0-20250318082646-6f12b484c806 // indirect
 	github.com/brotherlogic/githubridge v0.2849.0 // indirect
-	github.com/brotherlogic/lock v0.0.0-20250318075222-538e27519625 // indirect
+	github.com/brotherlogic/lock v0.0.0-20250318080220-eb8aabb58666 // indirect
 	github.com/brotherlogic/logging v0.0.0-20250318075828-fb8513a4fcf3 // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
