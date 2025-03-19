@@ -6,8 +6,8 @@ require (
 	github.com/brotherlogic/builder v0.0.0-20250319060448-88daf2ebe09b
 	github.com/brotherlogic/buildserver v0.0.0-20250319060906-9400c27b901f
 	github.com/brotherlogic/discovery v0.0.0-20241109204028-02908558af09
-	github.com/brotherlogic/dstore v0.0.0-20250319055059-bcf4563380f5
-	github.com/brotherlogic/filecopier v0.0.0-20250319060906-49f0b1c011e0
+	github.com/brotherlogic/dstore v0.0.0-20250319061910-e9bfab8a17cb
+	github.com/brotherlogic/filecopier v0.0.0-20250319061827-6d3ddefa9862
 	github.com/brotherlogic/gobuildslave v0.0.0-20250319055934-145921e2c99b
 	github.com/brotherlogic/goserver v0.0.0-20250123145056-95c6fbb2310a
 	github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126
