@@ -3,7 +3,7 @@ module github.com/brotherlogic/versiontracker
 go 1.23.2
 
 require (
-	github.com/brotherlogic/builder v0.0.0-20250328180610-6782811ad27a
+	github.com/brotherlogic/builder v0.0.0-20250404191331-1320be7fdd66
 	github.com/brotherlogic/buildserver v0.0.0-20250328223824-e8737b484be6
 	github.com/brotherlogic/discovery v0.0.0-20241109204028-02908558af09
 	github.com/brotherlogic/dstore v0.0.0-20250404182846-cc197f68c574
