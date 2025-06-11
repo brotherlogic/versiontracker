@@ -8,8 +8,8 @@ github.com/brotherlogic/datastore v0.0.0-20250610012354-722a6beaa331 h1:XTRMSwtc
 github.com/brotherlogic/datastore v0.0.0-20250610012354-722a6beaa331/go.mod h1:myPHKOYfXo6wQFA2eU5n+0ZuIljYaye3FUUepu5zycI=
 github.com/brotherlogic/discovery v0.0.0-20250611114541-2f0c1bb6a6da h1:g6WnIbsdGV4Ov2flwl8KBq82RQuz29OQTZ+G5LDa0ok=
 github.com/brotherlogic/discovery v0.0.0-20250611114541-2f0c1bb6a6da/go.mod h1:NFCcw09Afzkr8c25l2/LtfnxoLU5G1eYgVOGUJQ/Vq0=
-github.com/brotherlogic/dstore v0.0.0-20250611113412-4b892c6bb0b3 h1:igORFKe4g0EIKkhw6aycZ0qMDE9QuVUhC6GCCyJBGX4=
-github.com/brotherlogic/dstore v0.0.0-20250611113412-4b892c6bb0b3/go.mod h1:T8nSQhZXmd0SThfvZp97abwyDeOgvfcfaPT/b8B9xpc=
+github.com/brotherlogic/dstore v0.0.0-20250611123516-00bbc6e7525e h1:jqxMyFNx68KEkf/3z/zr5Est6hYMksnxhnsEYE9d/5A=
+github.com/brotherlogic/dstore v0.0.0-20250611123516-00bbc6e7525e/go.mod h1:lGOp9yM24zdry2BXMyrtwhH6sUpFGuudKCoxNeZll34=
 github.com/brotherlogic/filecopier v0.0.0-20250611115404-3002bcf7de88 h1:JWzepMi2hlFPP2C/Tigt8FeyLYyqHVWqriL47ENXpGw=
 github.com/brotherlogic/filecopier v0.0.0-20250611115404-3002bcf7de88/go.mod h1:WTOMTCjWK7zFR1UZNnskPD2EclZCrB9Tq55stCJvp5g=
 github.com/brotherlogic/githubcard v0.0.0-20250610012841-452c31c6d6aa h1:aUlnkWEmKYN7CDIFMOv2kD1q/PhHxAIyBM1sN+SrjWk=
