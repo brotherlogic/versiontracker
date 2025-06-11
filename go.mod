@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/brotherlogic/builder v0.0.0-20250601084047-757f16634196
-	github.com/brotherlogic/buildserver v0.0.0-20250610231436-e4f3d7c77fe9
+	github.com/brotherlogic/buildserver v0.0.0-20250611001501-d9e98e4d688c
 	github.com/brotherlogic/discovery v0.0.0-20250610235802-9c50e1b2842e
 	github.com/brotherlogic/dstore v0.0.0-20250610235237-cdc61358cf05
 	github.com/brotherlogic/filecopier v0.0.0-20250611001255-67951c0f7911
