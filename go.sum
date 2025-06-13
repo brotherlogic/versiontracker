@@ -6,12 +6,12 @@ github.com/brotherlogic/buildserver v0.0.0-20250613034100-31a445ac4c7e h1:7zOXnh
 github.com/brotherlogic/buildserver v0.0.0-20250613034100-31a445ac4c7e/go.mod h1:kjWn9Z2UTg+gJ/B+f8VhaRxl9fJ402wHVmnXxVUjR/4=
 github.com/brotherlogic/datastore v0.0.0-20250610012354-722a6beaa331 h1:XTRMSwtcgm8sBrtDZzXCfkUey9r+eOYjFj85HxuEd10=
 github.com/brotherlogic/datastore v0.0.0-20250610012354-722a6beaa331/go.mod h1:myPHKOYfXo6wQFA2eU5n+0ZuIljYaye3FUUepu5zycI=
-github.com/brotherlogic/discovery v0.0.0-20250613032829-8a5b4b4bb705 h1:B4+55oKKtXIx0/ZmzXMJ9kA1+4UtV7Ul43vBgSa/ek8=
-github.com/brotherlogic/discovery v0.0.0-20250613032829-8a5b4b4bb705/go.mod h1:+hhMtr+Q1DZu0sKOxUMMNUpvV8dxsd9+EItFFzbD5Oc=
+github.com/brotherlogic/discovery v0.0.0-20250613040610-ed09787bca6e h1:8on9b+X+ZddvqhF5r7+Ckz8i5EXxjXDkoVnWPAq3fa4=
+github.com/brotherlogic/discovery v0.0.0-20250613040610-ed09787bca6e/go.mod h1:i6dC1MnFVe7Ph43L1UZk5oHFFl4+UA07UgGLqD0fGi0=
 github.com/brotherlogic/dstore v0.0.0-20250613030651-2f16b8280067 h1:7j22pv9PXeZwWoKAGZYUZa2OLT6RNk6dFXMY47MRuO0=
 github.com/brotherlogic/dstore v0.0.0-20250613030651-2f16b8280067/go.mod h1:IoRyY3MRzpCBylXGDNqhDfhq3X5DQUP0t/VRouPr7iE=
-github.com/brotherlogic/filecopier v0.0.0-20250613033816-655b5c9f33d5 h1:jDGATJXDxUNNnNH4l9Lx844wlYvFu44DCDIOiM2OLIE=
-github.com/brotherlogic/filecopier v0.0.0-20250613033816-655b5c9f33d5/go.mod h1:hziuEPVNb5JknQUjO9wwmXbFMkG2rBEDEwClL6PN5MY=
+github.com/brotherlogic/filecopier v0.0.0-20250613040622-bfdb3aeacdd0 h1:fYkpO7Y1NlpJ6OZAQHNNBVlu4S1b4THBhid32TztjMc=
+github.com/brotherlogic/filecopier v0.0.0-20250613040622-bfdb3aeacdd0/go.mod h1:uENuEILTdkAszQnNAzq1m7fS7MrmYr9UJOW2V0QFqOQ=
 github.com/brotherlogic/githubcard v0.0.0-20250610012841-452c31c6d6aa h1:aUlnkWEmKYN7CDIFMOv2kD1q/PhHxAIyBM1sN+SrjWk=
 github.com/brotherlogic/githubcard v0.0.0-20250610012841-452c31c6d6aa/go.mod h1:mP7o/tQiQ9VMPc+obGomvlvAxDdVxRPjtYUi6F1Svv8=
 github.com/brotherlogic/githubridge v0.2865.0 h1:PK/nBpIZlEnFd4EurWTfHEjLLTuKejyLivmNJNoBmtc=
