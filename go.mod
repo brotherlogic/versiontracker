@@ -3,11 +3,11 @@ module github.com/brotherlogic/versiontracker
 go 1.24.4
 
 require (
-	github.com/brotherlogic/builder v0.0.0-20250601084047-757f16634196
-	github.com/brotherlogic/buildserver v0.0.0-20250629051854-162a9c26c9c5
+	github.com/brotherlogic/builder v0.0.0-20250702025928-bcab658ea769
+	github.com/brotherlogic/buildserver v0.0.0-20250630222042-5d9e9464cfeb
 	github.com/brotherlogic/discovery v0.0.0-20250613142713-1dac6d7d6bdd
 	github.com/brotherlogic/dstore v0.0.0-20250613140516-5b29ccb83705
-	github.com/brotherlogic/filecopier v0.0.0-20250623211912-89004280e0a8
+	github.com/brotherlogic/filecopier v0.0.0-20250630221432-8ac6420611a0
 	github.com/brotherlogic/gobuildslave v0.0.0-20250617150904-f41a1af90c2d
 	github.com/brotherlogic/goserver v0.0.0-20250608182006-4ace595931a5
 	github.com/brotherlogic/keystore v0.0.0-20240508161349-814b3200b126
@@ -21,10 +21,10 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/datastore v0.0.0-20250610012354-722a6beaa331 // indirect
-	github.com/brotherlogic/githubcard v0.0.0-20250628144502-a9135f09c106 // indirect
+	github.com/brotherlogic/githubcard v0.0.0-20250701142439-78d82bf337d4 // indirect
 	github.com/brotherlogic/githubridge v0.2865.0 // indirect
 	github.com/brotherlogic/lock v0.0.0-20250629072006-197388caac7e // indirect
-	github.com/brotherlogic/logging v0.0.0-20250629052428-da5dd1210c86 // indirect
+	github.com/brotherlogic/logging v0.0.0-20250629073448-d5ad667af102 // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -32,7 +32,7 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.65.0 // indirect
-	github.com/prometheus/procfs v0.16.1 // indirect
+	github.com/prometheus/procfs v0.17.0 // indirect
 	github.com/struCoder/pidusage v0.2.1 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.26.0 // indirect
